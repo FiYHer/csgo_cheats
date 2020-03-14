@@ -1,7 +1,7 @@
 #pragma once
+#include "config.hpp"
 
 #include <windows.h>
-
 #include <string>
 
 #include "imgui/imgui.h"
@@ -35,14 +35,21 @@ public:
 	//渲染界面函数
 	void render() noexcept 
 	{
-		if (!m_render) return;
+		if (!g_config.control.show_imgui) return;
 
 		ImGui_ImplDX9_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::Begin(u8"CSGO游戏辅助");
-		ImGui::Checkbox(u8"关闭窗口", &m_render);
+		ImGui::Begin(u8"CSGO游戏辅助", &g_config.control.show_imgui);
+
+		ImGui::Checkbox(u8"辉光人物", &g_config.control.glow);
+		if (g_config.control.glow)
+		{
+			ImGui::SameLine();
+			ImGui::ColorPicker3(u8"辉光颜色选择", g_config.control.glow_color);
+		}
+
 		ImGui::End();
 
 		ImGui::EndFrame();
@@ -89,9 +96,6 @@ public:
 
 		return ret;
 	}
-
-	//渲染开关
-	bool m_render{ true };
 };
 
 extern imgui_gui_class g_imgui;

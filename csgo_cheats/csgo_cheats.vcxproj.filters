@@ -16,6 +16,18 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{63f8430d-7ddb-4901-8a89-e2cf46cac67d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="class">
+      <UniqueIdentifier>{66c4f0e4-2965-4deb-8f30-64d2254975a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="struct">
+      <UniqueIdentifier>{30a1a65a-bece-46b1-b34f-b509448ffe34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cheats">
+      <UniqueIdentifier>{108e57be-71b3-400b-8eea-6890439e5bd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="enum">
+      <UniqueIdentifier>{3a7c144a-da60-4152-bc5b-6d5263058979}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,15 +51,15 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="self_vector.hpp">
+      <Filter>struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hooks.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="config.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="class.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
@@ -76,6 +88,57 @@
     </ClInclude>
     <ClInclude Include="imgui_gui.hpp">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="entity.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_list.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="help_func.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="glow.hpp">
+      <Filter>cheats</Filter>
+    </ClInclude>
+    <ClInclude Include="glow_object_manager.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="utl_vector.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="glow_object_definition.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix3x4.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="client_class.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="rect_table.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="recv_prop.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="recv_proxy_data.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="class_id.hpp">
+      <Filter>enum</Filter>
+    </ClInclude>
+    <ClInclude Include="net_vars.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="client.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="game_ui.hpp">
+      <Filter>class</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

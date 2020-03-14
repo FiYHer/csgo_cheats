@@ -8,11 +8,13 @@
 
 #include <d3d9.h>
 #pragma comment(lib,"d3d9")
+#include "glow.hpp"
 
 //前向声明
 static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 static HRESULT __stdcall my_present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept;
 static HRESULT __stdcall my_reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept;
+static int __stdcall doPostScreenEffects(int param) noexcept;
 
 //钩子类
 class hooks_class
@@ -25,12 +27,12 @@ public:
 		void* m_base;//内存基址
 		uintptr_t* m_old_vmt;//原始的地址
 		uintptr_t* m_new_vmt;//新的地址
-		int m_length;//地址页面长度
+		size_t m_length;//地址页面长度
 
 		//计算有效页面数量
-		int get_use_memory_length(uintptr_t* vmt) noexcept
+		size_t get_use_memory_length(uintptr_t* vmt) noexcept
 		{
-			int length = 0;
+			size_t length = 0;
 
 			//获取该地址的页面信息，该页面能读取能执行
 			MEMORY_BASIC_INFORMATION memoryInfo;
@@ -134,7 +136,13 @@ public:
 		original_reset = **reinterpret_cast<decltype(original_reset)**>(g_config.memory.reset);
 		**reinterpret_cast<decltype(my_reset)***>(g_config.memory.reset) = my_reset;
 
+		clientMode.hook_at(44, doPostScreenEffects);
+
+		g_config.gmae_ui->message_box("good message", "csgo helper inject finish");
 	}
+
+
+	vmt_class clientMode{ g_config.client_mode };//客户模式hook
 
 public:
 	//原始游戏窗口过程
@@ -161,12 +169,13 @@ static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LP
 	//进入imgui里面进行消息处理
 	ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
-
+	if (msg == WM_KEYDOWN && wParam == VK_INSERT) g_config.control.glow = !g_config.control.glow;
 
 	//回到原始的游戏窗口地址
 	return CallWindowProc(g_hooks.original_window_proc, window, msg, wParam, lParam);
 }
 
+//我们自己的present函数
 static HRESULT __stdcall my_present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
 	//初始化imgui的DX9设备
@@ -184,6 +193,7 @@ static HRESULT __stdcall my_present(IDirect3DDevice9* device, const RECT* src, c
 	return g_hooks.original_present(device, src, dest, windowOverride, dirtyRegion);
 }
 
+//我们自己的reset函数
 static HRESULT __stdcall my_reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
@@ -192,5 +202,12 @@ static HRESULT __stdcall my_reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETER
 	return result;
 }
 
-
+static int __stdcall doPostScreenEffects(int param) noexcept
+{
+	if (g_config.engine->is_in_game())
+	{
+		glow_space::render();
+	}
+	return g_hooks.clientMode.call_original<int, 44>(param);
+}
 

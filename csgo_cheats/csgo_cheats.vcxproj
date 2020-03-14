@@ -26,10 +26,21 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="self_vector.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="class.hpp" />
+    <ClInclude Include="class_id.hpp" />
+    <ClInclude Include="client.hpp" />
+    <ClInclude Include="client_class.hpp" />
     <ClInclude Include="config.hpp" />
+    <ClInclude Include="engine.hpp" />
+    <ClInclude Include="entity.hpp" />
+    <ClInclude Include="entity_list.hpp" />
+    <ClInclude Include="game_ui.hpp" />
+    <ClInclude Include="glow.hpp" />
+    <ClInclude Include="glow_object_definition.hpp" />
+    <ClInclude Include="glow_object_manager.hpp" />
+    <ClInclude Include="help_func.hpp" />
     <ClInclude Include="hooks.hpp" />
     <ClInclude Include="imgui_gui.hpp" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -40,6 +51,12 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="matrix3x4.hpp" />
+    <ClInclude Include="net_vars.hpp" />
+    <ClInclude Include="rect_table.hpp" />
+    <ClInclude Include="recv_prop.hpp" />
+    <ClInclude Include="recv_proxy_data.hpp" />
+    <ClInclude Include="utl_vector.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
