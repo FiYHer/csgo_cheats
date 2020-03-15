@@ -47,7 +47,8 @@ namespace glow_space
 				glow_object.alpha = 1.0f;//一点也不透明
 				glow_object.glowStyle = 0;//默认类型
 				glow_object.bloomAmount = 1.0f;//最厚
-				glow_object.glowColor = { g_config.control.glow_color[0],g_config.control.glow_color[1],g_config.control.glow_color[2] };//设置亮光
+				int health = local_player->get_health();//获取自身血量
+				glow_object.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };//设置亮光
 			}
 		}
 	}

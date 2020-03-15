@@ -13,7 +13,7 @@ typedef struct recv_prop_struct
 	void* arrayLengthProxy;
 	recv_proxy proxy;
 	void* dataTableProxy;
-	struct RecvTable* dataTable;
+	struct recv_table_struct* dataTable;
 	int offset;
 	int elementStride;
 	int elementCount;

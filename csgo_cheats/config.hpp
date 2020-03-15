@@ -1,14 +1,14 @@
 #pragma once
 #include "engine.hpp"
-#include "entity.hpp"
 #include "entity_list.hpp"
 #include "glow_object_manager.hpp"
+#include "client.hpp"
+#include "game_ui.hpp"
 
 #include <windows.h>
 #include <vadefs.h>
 #include <Psapi.h>
-#include "client.hpp"
-#include "game_ui.hpp"
+
 
 //客户模式类
 class client_mode_class;
@@ -19,7 +19,6 @@ typedef struct cheat_control_struct
 	bool show_imgui;//显示imgui菜单
 
 	bool glow;//辉光显示控制
-	float glow_color[3];//辉光颜色
 
 	cheat_control_struct()
 	{
@@ -117,6 +116,7 @@ typedef struct configuration_struct
 
 }configuration_struct;
 
+//导出给外部用
 extern configuration_struct g_config;
 
 

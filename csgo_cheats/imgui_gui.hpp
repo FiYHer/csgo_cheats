@@ -44,11 +44,6 @@ public:
 		ImGui::Begin(u8"CSGO游戏辅助", &g_config.control.show_imgui);
 
 		ImGui::Checkbox(u8"辉光人物", &g_config.control.glow);
-		if (g_config.control.glow)
-		{
-			ImGui::SameLine();
-			ImGui::ColorPicker3(u8"辉光颜色选择", g_config.control.glow_color);
-		}
 
 		ImGui::End();
 

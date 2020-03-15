@@ -54,6 +54,9 @@
     <ClCompile Include="self_vector.hpp">
       <Filter>struct</Filter>
     </ClCompile>
+    <ClCompile Include="net_vars.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hooks.hpp">
@@ -131,13 +134,16 @@
     <ClInclude Include="class_id.hpp">
       <Filter>enum</Filter>
     </ClInclude>
-    <ClInclude Include="net_vars.hpp">
-      <Filter>class</Filter>
-    </ClInclude>
     <ClInclude Include="client.hpp">
       <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="game_ui.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="fnv.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="net_vars.h">
       <Filter>class</Filter>
     </ClInclude>
   </ItemGroup>

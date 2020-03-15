@@ -26,6 +26,7 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="net_vars.cpp" />
     <ClCompile Include="self_vector.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +37,7 @@
     <ClInclude Include="engine.hpp" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="entity_list.hpp" />
+    <ClInclude Include="fnv.hpp" />
     <ClInclude Include="game_ui.hpp" />
     <ClInclude Include="glow.hpp" />
     <ClInclude Include="glow_object_definition.hpp" />
@@ -52,7 +54,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="matrix3x4.hpp" />
-    <ClInclude Include="net_vars.hpp" />
+    <ClInclude Include="net_vars.h" />
     <ClInclude Include="rect_table.hpp" />
     <ClInclude Include="recv_prop.hpp" />
     <ClInclude Include="recv_proxy_data.hpp" />

@@ -169,6 +169,7 @@ static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LP
 	//进入imgui里面进行消息处理
 	ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
+	//控制imgui的显示和隐藏
 	if (msg == WM_KEYDOWN && wParam == VK_INSERT) g_config.control.glow = !g_config.control.glow;
 
 	//回到原始的游戏窗口地址
