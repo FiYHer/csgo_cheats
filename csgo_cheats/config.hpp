@@ -1,13 +1,17 @@
 #pragma once
+#include <windows.h>
+#include <vadefs.h>
+#include <Psapi.h>
+
 #include "engine.hpp"
 #include "entity_list.hpp"
 #include "glow_object_manager.hpp"
 #include "client.hpp"
 #include "game_ui.hpp"
-
-#include <windows.h>
-#include <vadefs.h>
-#include <Psapi.h>
+#include "weapen_item_schema.hpp"
+#include "localize.hpp"
+#include "weapen_kit.hpp"
+#include "cvar.hpp"
 
 
 //客户模式类
@@ -19,6 +23,12 @@ typedef struct cheat_control_struct
 	bool show_imgui;//显示imgui菜单
 
 	bool glow;//辉光显示控制
+
+	bool skin;//换皮肤控制
+	std::vector<weapen_kit_struct> skin_vector;//武器皮肤列表
+	int weapon_skin_id;//武器皮肤ID
+	std::unordered_map<int,const char*> weapon_map;//通过ID查找枪械
+	int weapon_id;//当前武器ID
 
 	cheat_control_struct()
 	{
@@ -32,15 +42,25 @@ typedef struct memory_struct
 	uintptr_t present;//present函数地址
 	uintptr_t reset;//reset函数地址
 
-	
-
 	glow_object_mamager_struct* glow_object_mamager;//辉光对象管理结构指针
+
+	std::add_pointer_t<weapen_item_schema_class* __cdecl()> weapen_item_schema;//武器皮肤
+
+	uintptr_t hud;//图标地址
+	int*(__thiscall* find_hud_element)(uintptr_t, const char*);//查找图标元素
+	int(__thiscall* clear_hud_weapon)(int*, int);//清空武器图标
 
 	memory_struct()
 	{
 		present = find_pattern(L"gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
 		reset = find_pattern(L"gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8", 9);
 		glow_object_mamager = *reinterpret_cast<glow_object_mamager_struct**>(find_pattern(L"client_panorama", "\x0F\x11\x05????\x83\xC8\x01", 3));
+		weapen_item_schema = relativeToAbsolute<decltype(weapen_item_schema)>(reinterpret_cast<int*>(find_pattern(L"client_panorama", "\xE8????\x0F\xB7\x0F", 1)));
+		auto temp = reinterpret_cast<std::uintptr_t*>(find_pattern(L"client_panorama", "\xB9????\xE8????\x8B\x5D\x08", 1));
+		hud = *temp;
+		find_hud_element = relativeToAbsolute<decltype(find_hud_element)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
+		clear_hud_weapon = reinterpret_cast<decltype(clear_hud_weapon)>(find_pattern(L"client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C"));
+
 	}
 
 	//内存模式查找
@@ -88,6 +108,8 @@ typedef struct configuration_struct
 	client_class* client;//客户端类指针
 	client_mode_class* client_mode;//客户模式类指针
 	game_ui_class* gmae_ui;//游戏ui类指针
+	localize_class* localize;//定位类指针
+	cvar_class* cvar;//数值类指针
 
 	cheat_control_struct control;//作弊控制结构
 	memory_struct memory;//内存相关结构
@@ -99,6 +121,8 @@ typedef struct configuration_struct
 		client = find<client_class>(L"client_panorama", "VClient018");
 		client_mode = **reinterpret_cast<client_mode_class***>((*reinterpret_cast<uintptr_t**>(client))[10] + 5);
 		gmae_ui = find<game_ui_class>(L"client_panorama", "GameUI011");
+		localize = find<localize_class>(L"localize", "Localize_001");
+		cvar = find<cvar_class>(L"vstdlib", "VEngineCvar007");
 	}
 
 	//查找指定的接口

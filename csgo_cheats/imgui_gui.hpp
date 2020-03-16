@@ -7,6 +7,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
+#include "skin.hpp"
 
 
 class imgui_gui_class
@@ -44,6 +45,27 @@ public:
 		ImGui::Begin(u8"CSGOÓÎÏ·¸¨Öú", &g_config.control.show_imgui);
 
 		ImGui::Checkbox(u8"»Ô¹âÈËÎï", &g_config.control.glow);
+		ImGui::Checkbox(u8"ÎäÆ÷»»Æ¤·ô", &g_config.control.skin);
+
+		static int weapon_kit_index = 0;
+		ImGui::Combo(u8"ÎäÆ÷Æ¤·ôÑ¡Ôñ", &weapon_kit_index, [](void* data, int idx, const char** out_text)
+		{
+			//ÎäÆ÷Æ¤·ô×Ö·û´®
+			*out_text = g_config.control.skin_vector[idx].name.c_str();
+			return true;
+		}, nullptr, g_config.control.skin_vector.size(), 10);
+
+		//¸üĞÂÎäÆ÷Æ¤·ôID
+		 g_config.control.weapon_skin_id = g_config.control.skin_vector[weapon_kit_index].id;
+
+		 for (const auto& it : g_config.control.weapon_map)
+			 if (it.first == g_config.control.weapon_id)
+			 {
+				 ImGui::Text(it.second);
+				 break;
+			 }
+
+		 if (ImGui::Button(u8"¸üĞÂÎäÆ÷Æ¤·ô")) skin_space::schedule_hud_update();
 
 		ImGui::End();
 

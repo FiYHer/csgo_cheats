@@ -57,6 +57,9 @@
     <ClCompile Include="net_vars.cpp">
       <Filter>class</Filter>
     </ClCompile>
+    <ClCompile Include="self_string.hpp">
+      <Filter>struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hooks.hpp">
@@ -145,6 +148,45 @@
     </ClInclude>
     <ClInclude Include="net_vars.h">
       <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="skin.hpp">
+      <Filter>cheats</Filter>
+    </ClInclude>
+    <ClInclude Include="frame_state.hpp">
+      <Filter>enum</Filter>
+    </ClInclude>
+    <ClInclude Include="game_event.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="head.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="node.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="paint_kit.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="weapen_item_schema.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="localize.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="weapen_kit.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="player_info.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_item_definition_index.hpp">
+      <Filter>enum</Filter>
+    </ClInclude>
+    <ClInclude Include="cvar.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="con_var.hpp">
+      <Filter>struct</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

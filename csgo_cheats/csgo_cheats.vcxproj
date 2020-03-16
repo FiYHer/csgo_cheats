@@ -27,6 +27,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="net_vars.cpp" />
+    <ClCompile Include="self_string.hpp" />
     <ClCompile Include="self_vector.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -34,14 +35,19 @@
     <ClInclude Include="client.hpp" />
     <ClInclude Include="client_class.hpp" />
     <ClInclude Include="config.hpp" />
+    <ClInclude Include="con_var.hpp" />
+    <ClInclude Include="cvar.hpp" />
     <ClInclude Include="engine.hpp" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="entity_list.hpp" />
     <ClInclude Include="fnv.hpp" />
+    <ClInclude Include="frame_state.hpp" />
+    <ClInclude Include="game_event.hpp" />
     <ClInclude Include="game_ui.hpp" />
     <ClInclude Include="glow.hpp" />
     <ClInclude Include="glow_object_definition.hpp" />
     <ClInclude Include="glow_object_manager.hpp" />
+    <ClInclude Include="head.hpp" />
     <ClInclude Include="help_func.hpp" />
     <ClInclude Include="hooks.hpp" />
     <ClInclude Include="imgui_gui.hpp" />
@@ -53,12 +59,20 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="localize.hpp" />
     <ClInclude Include="matrix3x4.hpp" />
     <ClInclude Include="net_vars.h" />
+    <ClInclude Include="node.hpp" />
+    <ClInclude Include="paint_kit.hpp" />
+    <ClInclude Include="player_info.hpp" />
+    <ClInclude Include="weapen_kit.hpp" />
     <ClInclude Include="rect_table.hpp" />
     <ClInclude Include="recv_prop.hpp" />
     <ClInclude Include="recv_proxy_data.hpp" />
+    <ClInclude Include="skin.hpp" />
     <ClInclude Include="utl_vector.hpp" />
+    <ClInclude Include="weapen_item_schema.hpp" />
+    <ClInclude Include="weapon_item_definition_index.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -119,6 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -1,20 +1,24 @@
 #pragma once
 #include "config.hpp"
+#include "skin.hpp"
 #include "imgui_gui.hpp"
 
 #include <assert.h>
 #include <Psapi.h>
-#include <algorithm>
+#include <xmmintrin.h>
+#include <pmmintrin.h>
 
 #include <d3d9.h>
 #pragma comment(lib,"d3d9")
 #include "glow.hpp"
 
+
 //前向声明
 static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 static HRESULT __stdcall my_present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept;
 static HRESULT __stdcall my_reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept;
-static int __stdcall doPostScreenEffects(int param) noexcept;
+static int __stdcall do_post_screen_effects(int param) noexcept;
+static void __stdcall frame_stage_notify(frame_stage_enum stage) noexcept;
 
 //钩子类
 class hooks_class
@@ -127,6 +131,11 @@ public:
 public:
 	hooks_class() noexcept
 	{
+		skin_space::initialize_skin();
+		skin_space::initialize_weapon();
+		_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+		_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+
 		//替换游戏窗口过程
 		original_window_proc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(my_window_proc)));
 	
@@ -136,13 +145,15 @@ public:
 		original_reset = **reinterpret_cast<decltype(original_reset)**>(g_config.memory.reset);
 		**reinterpret_cast<decltype(my_reset)***>(g_config.memory.reset) = my_reset;
 
-		clientMode.hook_at(44, doPostScreenEffects);
+		client.hook_at(37, frame_stage_notify);
+		clientMode.hook_at(44, do_post_screen_effects);
 
 		g_config.gmae_ui->message_box("good message", "csgo helper inject finish");
 	}
 
 
 	vmt_class clientMode{ g_config.client_mode };//客户模式hook
+	vmt_class client{ g_config.client };//客户端hook
 
 public:
 	//原始游戏窗口过程
@@ -203,7 +214,7 @@ static HRESULT __stdcall my_reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETER
 	return result;
 }
 
-static int __stdcall doPostScreenEffects(int param) noexcept
+static int __stdcall do_post_screen_effects(int param) noexcept
 {
 	if (g_config.engine->is_in_game())
 	{
@@ -211,4 +222,17 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 	}
 	return g_hooks.clientMode.call_original<int, 44>(param);
 }
+
+static void __stdcall frame_stage_notify(frame_stage_enum stage) noexcept
+{
+	if (g_config.engine->is_in_game())
+	{
+		skin_space::run(stage);
+	}
+	g_hooks.client.call_original<void, 37>(stage);
+}
+
+
+
+
 
