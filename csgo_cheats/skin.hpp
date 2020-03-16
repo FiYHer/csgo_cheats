@@ -101,8 +101,10 @@ namespace skin_space
 							weapen_name += "-" + name;
 						}
 					}
-					if(weapen_name.size() && weapen_name[0] >= 'a')
+					if (weapen_name.size() && weapen_name[0] >= 'a' && weapen_name[0] <= 'z')
 						g_config.control.skin_vector.emplace_back(paint_kit->id, std::move(weapen_name));
+					else
+						g_config.control.skin_vector.emplace_back(paint_kit->id, "null");
 				}
 			}
 		}
@@ -155,13 +157,13 @@ namespace skin_space
 			//ÉèÖÃÎäÆ÷Æ¤·ôID
 			weapon->get_fallback_paint_kit() = g_config.control.weapon_skin_id;
 
-			//ÉèÖÃÎäÆ÷sedd
+			//ÉèÖÃÎäÆ÷seed
 			weapon->get_fallback_seed() = 0;
 
-			//ÉèÖÃÎäÆ÷µÄ
+			//ÉèÖÃÎäÆ÷µÄstat_trak
 			weapon->get_fallback_stat_trak() = 0;
 
-			//ÉèÖÃÎäÆ÷µÄ
+			//ÉèÖÃÎäÆ÷µÄwear
 			weapon->get_fallback_wear() = 0;
 		}
 	}
@@ -208,16 +210,6 @@ namespace skin_space
 
 		//ÐèÒª¸üÐÂÍ¼±ê
 		hud_update_required = true;
-	}
-
-	//¸²¸ÇhudÍ¼±ê
-	void override_hud_icon(game_event_class& event) noexcept
-	{	
-		if (g_config.engine->get_player_for_user_id(event.get_int("attacker")) == g_config.engine->get_local_player())
-		{
-			/*if (const auto iconOverride = iconOverrides[event.get_string("weapon")])
-				event.set_string("weapon", iconOverride);*/
-		}
 	}
 
 }

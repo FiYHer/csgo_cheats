@@ -47,25 +47,25 @@ public:
 		ImGui::Checkbox(u8"辉光人物", &g_config.control.glow);
 		ImGui::Checkbox(u8"武器换皮肤", &g_config.control.skin);
 
-		static int weapon_kit_index = 0;
+		static int weapon_kit_index_last = 0;//上一次的武器皮肤
+		static int weapon_kit_index = 0;//这一次的武器皮肤
+
 		ImGui::Combo(u8"武器皮肤选择", &weapon_kit_index, [](void* data, int idx, const char** out_text)
 		{
 			//武器皮肤字符串
 			*out_text = g_config.control.skin_vector[idx].name.c_str();
+
+			//更新武器皮肤ID
+			g_config.control.weapon_skin_id = g_config.control.skin_vector[idx].id;
 			return true;
 		}, nullptr, g_config.control.skin_vector.size(), 10);
 
-		//更新武器皮肤ID
-		 g_config.control.weapon_skin_id = g_config.control.skin_vector[weapon_kit_index].id;
-
-		 for (const auto& it : g_config.control.weapon_map)
-			 if (it.first == g_config.control.weapon_id)
-			 {
-				 ImGui::Text(it.second);
-				 break;
-			 }
-
-		 if (ImGui::Button(u8"更新武器皮肤")) skin_space::schedule_hud_update();
+		//这一次于上一次不一样，所以是新选择了武器皮肤
+		if (weapon_kit_index_last != weapon_kit_index)
+		{
+			skin_space::schedule_hud_update();
+			weapon_kit_index_last = weapon_kit_index;
+		}
 
 		ImGui::End();
 

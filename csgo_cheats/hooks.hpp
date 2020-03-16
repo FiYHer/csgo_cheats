@@ -131,6 +131,7 @@ public:
 public:
 	hooks_class() noexcept
 	{
+		//武器皮肤初始化
 		skin_space::initialize_skin();
 		skin_space::initialize_weapon();
 		_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
@@ -155,7 +156,6 @@ public:
 	vmt_class clientMode{ g_config.client_mode };//客户模式hook
 	vmt_class client{ g_config.client };//客户端hook
 
-public:
 	//原始游戏窗口过程
 	WNDPROC original_window_proc;
 
@@ -164,9 +164,6 @@ public:
 	
 	//Reset
 	std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> original_reset;
-
-
-
 };
 
 extern hooks_class g_hooks;
@@ -181,7 +178,7 @@ static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LP
 	ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
 	//控制imgui的显示和隐藏
-	if (msg == WM_KEYDOWN && wParam == VK_INSERT) g_config.control.glow = !g_config.control.glow;
+	if (msg == WM_KEYDOWN && wParam == VK_INSERT) g_config.control.show_imgui = !g_config.control.show_imgui;
 
 	//回到原始的游戏窗口地址
 	return CallWindowProc(g_hooks.original_window_proc, window, msg, wParam, lParam);
