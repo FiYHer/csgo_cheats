@@ -1,6 +1,7 @@
 #pragma once
 #include "help_func.hpp"
 #include "player_info.hpp"
+#include "self_vector.hpp"
 
 //游戏引擎类
 class engine_class
@@ -29,5 +30,31 @@ public:
 	{
 		return call_virtual_method<int, int>(this, 9, userId);
 	}
+
+	//获取全部游戏玩家数量
+	constexpr auto get_max_clients() noexcept
+	{
+		return call_virtual_method<int>(this, 20);
+	}
+
+	//获取自身矩阵
+	using self_matrix = float[4][4];
+	constexpr auto world_to_screen_matrix() noexcept
+	{
+		return call_virtual_method<const self_matrix&>(this, 37);
+	}
+
+	//获取人物角度
+	constexpr auto get_view_angles(self_vector_struct& angles) noexcept
+	{
+		call_virtual_method<void, self_vector_struct&>(this, 18, angles);
+	}
+
+	//设置人物角度
+	constexpr auto set_view_angles(const self_vector_struct& angles) noexcept
+	{
+		call_virtual_method<void, const self_vector_struct&>(this, 19, angles);
+	}
+
 
 };

@@ -12,7 +12,8 @@
 #include "localize.hpp"
 #include "weapen_kit.hpp"
 #include "cvar.hpp"
-
+#include "user_cmd.hpp"
+#include "global_vars.h"
 
 //客户模式类
 class client_mode_class;
@@ -30,9 +31,26 @@ typedef struct cheat_control_struct
 	std::unordered_map<int,const char*> weapon_map;//通过ID查找枪械
 	int weapon_id;//当前武器ID
 
+	bool aim;//自瞄开关控制
+
+	int report_mode;//举报开关控制
+	int report_interval;//举报间隔
+	std::vector<player_info_struct> report_players;//游戏房间玩家信息列表
+	size_t report_player_xuid;//举报玩家xuid
+	bool report_text_abuse;//骂人
+	bool report_grief;//骚扰
+	bool report_wall_hack;//透视
+	bool report_aim_bot;//自瞄
+	bool report_speed_hack;//加速
+
+
 	cheat_control_struct()
 	{
 		show_imgui = true;
+
+		report_interval = 10;
+
+		report_wall_hack = report_aim_bot = true;
 	}
 }cheat_control_struct;
 
@@ -50,6 +68,10 @@ typedef struct memory_struct
 	int*(__thiscall* find_hud_element)(uintptr_t, const char*);//查找图标元素
 	int(__thiscall* clear_hud_weapon)(int*, int);//清空武器图标
 
+	bool(__thiscall* is_other_enemy)(entity_class*, entity_class*);//判断是否是敌人函数
+
+	std::add_pointer_t<bool __stdcall(const char*, const char*)> submit_report;//举报玩家函数地址
+
 	memory_struct()
 	{
 		present = find_pattern(L"gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
@@ -60,6 +82,8 @@ typedef struct memory_struct
 		hud = *temp;
 		find_hud_element = relativeToAbsolute<decltype(find_hud_element)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
 		clear_hud_weapon = reinterpret_cast<decltype(clear_hud_weapon)>(find_pattern(L"client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C"));
+		is_other_enemy = relativeToAbsolute<decltype(is_other_enemy)>(reinterpret_cast<int*>(find_pattern(L"client_panorama", "\xE8????\x02\xC0", 1)));
+		submit_report = reinterpret_cast<decltype(submit_report)>(find_pattern(L"client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08"));
 
 	}
 
@@ -114,6 +138,8 @@ typedef struct configuration_struct
 	cheat_control_struct control;//作弊控制结构
 	memory_struct memory;//内存相关结构
 
+	global_vars_struct* global_vars;//全局内存变量结构指针
+
 	configuration_struct()
 	{
 		engine = find<engine_class>(L"engine", "VEngineClient014");
@@ -123,6 +149,8 @@ typedef struct configuration_struct
 		gmae_ui = find<game_ui_class>(L"client_panorama", "GameUI011");
 		localize = find<localize_class>(L"localize", "Localize_001");
 		cvar = find<cvar_class>(L"vstdlib", "VEngineCvar007");
+		global_vars = **reinterpret_cast<global_vars_struct***>((*reinterpret_cast<uintptr_t**>(client))[11] + 10);
+
 	}
 
 	//查找指定的接口

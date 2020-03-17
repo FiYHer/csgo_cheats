@@ -1,6 +1,6 @@
 #pragma once
 #include "help_func.hpp"
-#include "entity.hpp"
+#include "entity.h"
 
 //实例列表类
 class entity_list_class

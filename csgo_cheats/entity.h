@@ -28,11 +28,18 @@ public:
 		return call_virtual_method<bool>(this, 155) && get_health() > 0;
 	}
 
-	//根据句柄获取
+	//根据句柄获取实例
 	constexpr auto get_entity_from_handle(int handle) noexcept
 	{
 		return call_virtual_method<entity_class*, int>(this, 4, handle);
 	}
+
+	//判断是否是敌人
+	bool is_enemy() noexcept;
+
+	//判断玩家是否在视线中
+	bool is_visiable(const self_vector_struct& position) noexcept;
+
 
 public:
 
@@ -49,6 +56,6 @@ public:
 	NETVAR(get_fallback_seed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned)//
 	NETVAR(get_fallback_stat_trak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)//
 	NETVAR(get_fallback_wear, "CBaseAttributableItem", "m_flFallbackWear", float)//
-
+	NETVAR(get_tick_base, "CBasePlayer", "m_nTickBase", int)//
 
 };

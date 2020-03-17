@@ -1,5 +1,5 @@
 #pragma once
-#include "entity.hpp"
+#include "entity.h"
 #include "self_vector.hpp"
 #include <cstddef>
 

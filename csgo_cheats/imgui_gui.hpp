@@ -3,12 +3,12 @@
 
 #include <windows.h>
 #include <string>
+#include <filesystem>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 #include "skin.hpp"
-
 
 class imgui_gui_class
 {
@@ -30,7 +30,15 @@ public:
 		io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;//不需要改变鼠标样式
 
 		//设置字体文件
-		io.Fonts->AddFontFromFileTTF("c:\\msyh.ttc", 20.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		const char* font_path = "c:\\msyh.ttc";
+		if (std::filesystem::exists(font_path))
+			io.Fonts->AddFontFromFileTTF(font_path, 20.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		else 
+		{
+			char buffer[2000];
+			sprintf(buffer, "没有发现字体文件,可能无法正常显示字体\t  文件:%s 函数:%s 源代码行:%d\n", __FILE__, __FUNCTION__, __LINE__);
+			MessageBoxA(NULL, buffer, "警告信息", NULL);
+		}
 	}
 
 	//渲染界面函数
@@ -45,11 +53,12 @@ public:
 		ImGui::Begin(u8"CSGO游戏辅助", &g_config.control.show_imgui);
 
 		ImGui::Checkbox(u8"辉光人物", &g_config.control.glow);
-		ImGui::Checkbox(u8"武器换皮肤", &g_config.control.skin);
+		ImGui::Separator();
 
 		static int weapon_kit_index_last = 0;//上一次的武器皮肤
 		static int weapon_kit_index = 0;//这一次的武器皮肤
-
+		ImGui::Checkbox(u8"武器换皮肤", &g_config.control.skin);
+		ImGui::SameLine();
 		ImGui::Combo(u8"武器皮肤选择", &weapon_kit_index, [](void* data, int idx, const char** out_text)
 		{
 			//武器皮肤字符串
@@ -66,6 +75,49 @@ public:
 			skin_space::schedule_hud_update();
 			weapon_kit_index_last = weapon_kit_index;
 		}
+		ImGui::Separator();
+
+		ImGui::RadioButton(u8"关闭举报", &g_config.control.report_mode, 0);
+		ImGui::SameLine();
+		ImGui::RadioButton(u8"全部举报", &g_config.control.report_mode, 1);
+		ImGui::SameLine();
+		ImGui::RadioButton(u8"单个举报", &g_config.control.report_mode, 2);
+		ImGui::Separator();
+
+		if (g_config.control.report_mode)
+		{
+			ImGui::Checkbox(u8"举报骂人", &g_config.control.report_text_abuse);
+			ImGui::SameLine();
+			ImGui::Checkbox(u8"举报骚扰", &g_config.control.report_grief);
+			ImGui::SameLine();
+			ImGui::Checkbox(u8"举报透视", &g_config.control.report_wall_hack);
+			ImGui::SameLine();
+			ImGui::Checkbox(u8"举报自瞄", &g_config.control.report_aim_bot);
+			ImGui::SameLine();
+			ImGui::Checkbox(u8"举报加速", &g_config.control.report_speed_hack);
+			ImGui::Separator();
+
+			ImGui::SliderInt(u8"举报时间间隔", &g_config.control.report_interval, 5, 50);
+			ImGui::SameLine();
+			if (ImGui::Button(u8"从新举报")) report_space::clear_report_list();
+			ImGui::Separator();
+
+			if (g_config.control.report_mode == 2 && g_config.control.report_players.size())
+			{
+				static int report_player_index = 0;
+				ImGui::Combo(u8"选择举报玩家", &report_player_index, [](void* data, int idx, const char** out_text)
+				{
+					//武器皮肤字符串
+					*out_text = g_config.control.report_players[idx].name;
+
+					//更新武器皮肤ID
+					g_config.control.report_player_xuid = g_config.control.report_players[idx].xuid;
+					return true;
+				}, nullptr, g_config.control.report_players.size(), 10);
+			}
+		}
+
+
 
 		ImGui::End();
 

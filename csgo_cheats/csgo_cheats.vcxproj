@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="global_var.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -31,6 +33,7 @@
     <ClCompile Include="self_vector.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aim.hpp" />
     <ClInclude Include="class_id.hpp" />
     <ClInclude Include="client.hpp" />
     <ClInclude Include="client_class.hpp" />
@@ -38,12 +41,13 @@
     <ClInclude Include="con_var.hpp" />
     <ClInclude Include="cvar.hpp" />
     <ClInclude Include="engine.hpp" />
-    <ClInclude Include="entity.hpp" />
+    <ClInclude Include="entity.h" />
     <ClInclude Include="entity_list.hpp" />
     <ClInclude Include="fnv.hpp" />
     <ClInclude Include="frame_state.hpp" />
     <ClInclude Include="game_event.hpp" />
     <ClInclude Include="game_ui.hpp" />
+    <ClInclude Include="global_vars.h" />
     <ClInclude Include="glow.hpp" />
     <ClInclude Include="glow_object_definition.hpp" />
     <ClInclude Include="glow_object_manager.hpp" />
@@ -65,6 +69,9 @@
     <ClInclude Include="node.hpp" />
     <ClInclude Include="paint_kit.hpp" />
     <ClInclude Include="player_info.hpp" />
+    <ClInclude Include="report.hpp" />
+    <ClInclude Include="sight_trace.hpp" />
+    <ClInclude Include="user_cmd.hpp" />
     <ClInclude Include="weapen_kit.hpp" />
     <ClInclude Include="rect_table.hpp" />
     <ClInclude Include="recv_prop.hpp" />

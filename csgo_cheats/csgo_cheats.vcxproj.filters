@@ -60,6 +60,12 @@
     <ClCompile Include="self_string.hpp">
       <Filter>struct</Filter>
     </ClCompile>
+    <ClCompile Include="entity.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
+    <ClCompile Include="global_var.cpp">
+      <Filter>struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hooks.hpp">
@@ -94,12 +100,6 @@
     </ClInclude>
     <ClInclude Include="imgui_gui.hpp">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="engine.hpp">
-      <Filter>class</Filter>
-    </ClInclude>
-    <ClInclude Include="entity.hpp">
-      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="entity_list.hpp">
       <Filter>class</Filter>
@@ -186,6 +186,27 @@
       <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="con_var.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="user_cmd.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="aim.hpp">
+      <Filter>cheats</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="entity.h">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="sight_trace.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="report.hpp">
+      <Filter>cheats</Filter>
+    </ClInclude>
+    <ClInclude Include="global_vars.h">
       <Filter>struct</Filter>
     </ClInclude>
   </ItemGroup>

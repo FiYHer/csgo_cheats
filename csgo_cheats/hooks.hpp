@@ -1,6 +1,8 @@
 #pragma once
 #include "config.hpp"
 #include "skin.hpp"
+#include "aim.hpp"
+#include "report.hpp"
 #include "imgui_gui.hpp"
 
 #include <assert.h>
@@ -19,6 +21,8 @@ static HRESULT __stdcall my_present(IDirect3DDevice9* device, const RECT* src, c
 static HRESULT __stdcall my_reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept;
 static int __stdcall do_post_screen_effects(int param) noexcept;
 static void __stdcall frame_stage_notify(frame_stage_enum stage) noexcept;
+static bool __stdcall create_move(float input_sample_time, user_cmd_struct* cmd) noexcept;
+
 
 //钩子类
 class hooks_class
@@ -146,7 +150,9 @@ public:
 		original_reset = **reinterpret_cast<decltype(original_reset)**>(g_config.memory.reset);
 		**reinterpret_cast<decltype(my_reset)***>(g_config.memory.reset) = my_reset;
 
+
 		client.hook_at(37, frame_stage_notify);
+		clientMode.hook_at(24, create_move);
 		clientMode.hook_at(44, do_post_screen_effects);
 
 		g_config.gmae_ui->message_box("good message", "csgo helper inject finish");
@@ -229,7 +235,21 @@ static void __stdcall frame_stage_notify(frame_stage_enum stage) noexcept
 	g_hooks.client.call_original<void, 37>(stage);
 }
 
+static bool __stdcall create_move(float input_sample_time, user_cmd_struct* cmd) noexcept
+{
+	bool state = g_hooks.clientMode.call_original<bool, 24>(input_sample_time, cmd);
 
+	//没有命令
+	if (!cmd->command_number) return state;
+
+	if (g_config.engine->is_in_game())
+	{
+		aim_space::run(cmd);
+		report_space::run();
+	}
+
+	return state;
+}
 
 
 
