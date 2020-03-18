@@ -40,9 +40,18 @@ public:
 	//判断玩家是否在视线中
 	bool is_visiable(const self_vector_struct& position) noexcept;
 
+	//获取人物视线方位
+	self_vector_struct get_eye_position() noexcept;
+
+	//获取骨骼的位置
+	self_vector_struct get_bone_position(int bone = 8) noexcept;
+
+	//初始化人物骨骼
+	constexpr bool setup_bones(matrix3x4_class* out, int max_bones, int bone_mask, float current_time) noexcept;
 
 public:
 
+	NETVAR(get_origin, "CBaseEntity", "m_vecOrigin", self_vector_struct)//玩家的地图位置
 	NETVAR(get_health, "CBasePlayer", "m_iHealth", int)//获取玩家血量
 	NETVAR_OFFSET(get_index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int)//获取索引
 	NETVAR(get_weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])//武器信息

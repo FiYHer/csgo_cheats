@@ -158,6 +158,18 @@ public:
 		g_config.gmae_ui->message_box("good message", "csgo helper inject finish");
 	}
 
+	//恢复游戏原数据
+	void restore() noexcept
+	{
+		clientMode.restore();
+		client.restore();
+
+		glow_space::clear_custom_objects();
+
+		SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(original_window_proc));
+		**reinterpret_cast<void***>(g_config.memory.present) = original_present;
+		**reinterpret_cast<void***>(g_config.memory.reset) = original_reset;
+	}
 
 	vmt_class clientMode{ g_config.client_mode };//客户模式hook
 	vmt_class client{ g_config.client };//客户端hook

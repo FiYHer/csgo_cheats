@@ -41,6 +41,7 @@
     <ClInclude Include="con_var.hpp" />
     <ClInclude Include="cvar.hpp" />
     <ClInclude Include="engine.hpp" />
+    <ClInclude Include="engine_sight_trace.hpp" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="entity_list.hpp" />
     <ClInclude Include="fnv.hpp" />
@@ -69,8 +70,10 @@
     <ClInclude Include="node.hpp" />
     <ClInclude Include="paint_kit.hpp" />
     <ClInclude Include="player_info.hpp" />
+    <ClInclude Include="ray.hpp" />
     <ClInclude Include="report.hpp" />
     <ClInclude Include="sight_trace.hpp" />
+    <ClInclude Include="sight_trace_filter.hpp" />
     <ClInclude Include="user_cmd.hpp" />
     <ClInclude Include="weapen_kit.hpp" />
     <ClInclude Include="rect_table.hpp" />

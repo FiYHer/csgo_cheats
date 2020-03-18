@@ -209,5 +209,14 @@
     <ClInclude Include="global_vars.h">
       <Filter>struct</Filter>
     </ClInclude>
+    <ClInclude Include="engine_sight_trace.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="ray.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="sight_trace_filter.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

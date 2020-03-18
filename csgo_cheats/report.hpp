@@ -69,7 +69,7 @@ namespace report_space
 	void run() noexcept
 	{
 		//没开
-		if (!g_config.control.report_mode) return;
+		if (!g_config.control.report) return;
 
 		//获取所有玩家
 		get_room_players_info();
@@ -87,6 +87,7 @@ namespace report_space
 		if (g_config.control.report_speed_hack) report_info += "speedhack,";
 		if (report_info.empty()) return;
 
+		//开始举报
 		if (g_config.control.report_mode == 1) report_players(report_info);
 		else report_player(report_info, g_config.control.report_player_xuid);
 

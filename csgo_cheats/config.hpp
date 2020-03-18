@@ -14,6 +14,7 @@
 #include "cvar.hpp"
 #include "user_cmd.hpp"
 #include "global_vars.h"
+#include "engine_sight_trace.hpp"
 
 //客户模式类
 class client_mode_class;
@@ -32,11 +33,13 @@ typedef struct cheat_control_struct
 	int weapon_id;//当前武器ID
 
 	bool aim;//自瞄开关控制
+	float aim_offset;//自瞄微调
 
-	int report_mode;//举报开关控制
+	bool report;//举报开关控制
+	int report_mode;//举报模式
 	int report_interval;//举报间隔
 	std::vector<player_info_struct> report_players;//游戏房间玩家信息列表
-	size_t report_player_xuid;//举报玩家xuid
+	uint64_t report_player_xuid;//举报玩家xuid
 	bool report_text_abuse;//骂人
 	bool report_grief;//骚扰
 	bool report_wall_hack;//透视
@@ -48,7 +51,8 @@ typedef struct cheat_control_struct
 	{
 		show_imgui = true;
 
-		report_interval = 10;
+		aim_offset = 1.5f;
+		report_interval = 5;
 
 		report_wall_hack = report_aim_bot = true;
 	}
@@ -134,6 +138,7 @@ typedef struct configuration_struct
 	game_ui_class* gmae_ui;//游戏ui类指针
 	localize_class* localize;//定位类指针
 	cvar_class* cvar;//数值类指针
+	engine_trace_class* engine_trace;//引擎视线跟踪类指针
 
 	cheat_control_struct control;//作弊控制结构
 	memory_struct memory;//内存相关结构
@@ -150,6 +155,8 @@ typedef struct configuration_struct
 		localize = find<localize_class>(L"localize", "Localize_001");
 		cvar = find<cvar_class>(L"vstdlib", "VEngineCvar007");
 		global_vars = **reinterpret_cast<global_vars_struct***>((*reinterpret_cast<uintptr_t**>(client))[11] + 10);
+		engine_trace = find<engine_trace_class>(L"engine", "EngineTraceClient004");
+
 
 	}
 
