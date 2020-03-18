@@ -2,8 +2,10 @@
 #include "help_func.hpp"
 #include "client_class.hpp"
 #include "net_vars.h"
+#include "move_type.hpp"
 
 #include <string>
+
 
 
 //实例类
@@ -66,5 +68,10 @@ public:
 	NETVAR(get_fallback_stat_trak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)//
 	NETVAR(get_fallback_wear, "CBaseAttributableItem", "m_flFallbackWear", float)//
 	NETVAR(get_tick_base, "CBasePlayer", "m_nTickBase", int)//
+	NETVAR(get_is_scoped, "CCSPlayer", "m_bIsScoped", bool)//判断玩家是否处于开镜状态
+	NETVAR(get_next_attack, "CBaseCombatCharacter", "m_flNextAttack", float)//下一次攻击的时间
+	NETVAR(get_flags, "CBasePlayer", "m_fFlags", int)//人物状态标识
+	NETVAR_OFFSET(get_move_type, "CBaseEntity", "m_nRenderMode", 1, move_type_enum)//获取人物移动类型
+
 
 };

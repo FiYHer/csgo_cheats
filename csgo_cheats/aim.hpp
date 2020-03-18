@@ -20,8 +20,28 @@ namespace aim_space
 		else if (x < 0.0f && y < 0.0f) angle.y = angle.y / pi * 180.0f;
 		else if (x >= 0.0f && y < 0.0f) angle.y = angle.y / pi * 180.f + 180.0f;
 
+		//角度范围
+		self_vector_struct old_angle;
+		g_config.engine->get_view_angles(old_angle);
+		if (abs(angle.x - old_angle.x) > g_config.control.aim_max_angle
+			|| abs(angle.y - old_angle.y) > g_config.control.aim_max_angle) return;
+
+		//设置角度
 		cmd->view_angles = angle;
 		g_config.engine->set_view_angles(cmd->view_angles);
+
+		//开镜
+		if (g_config.control.aim_auto_scoped 
+			&& !g_config.entity_list->get_entity(g_config.engine->get_local_player())->get_is_scoped())
+			cmd->buttons |= user_cmd_struct::IN_ATTACK2;
+
+		//开枪
+		if (g_config.control.aim_auto_fire) cmd->buttons |= user_cmd_struct::IN_ATTACK;
+
+		//关闭开镜状态
+		if (g_config.control.aim_close_scoped
+			&& g_config.entity_list->get_entity(g_config.engine->get_local_player())->get_is_scoped())
+			cmd->buttons |= user_cmd_struct::IN_ATTACK2;
 	}
 
 	//开启自瞄
@@ -95,7 +115,20 @@ namespace aim_space
 			}
 		}
 
-		if(min_distance != INT_MAX) aim_start(cmd, local_player->get_origin(), min_pos);
+		//没有玩家
+		if (min_distance == INT_MAX) return;
+
+		//开镜自瞄
+		if (g_config.control.aim_scoped && local_player->get_is_scoped())
+			aim_start(cmd, local_player->get_origin(), min_pos);
+
+		//开枪自瞄
+		if (g_config.control.aim_fire && cmd->buttons & user_cmd_struct::IN_ATTACK)
+			aim_start(cmd, local_player->get_origin(), min_pos);
+
+		//静步自瞄
+		if(g_config.control.aim_quiet_step && GetAsyncKeyState(VK_SHIFT) & 0x8000)
+			aim_start(cmd, local_player->get_origin(), min_pos);
 	}
 
 

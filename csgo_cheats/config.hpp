@@ -33,7 +33,14 @@ typedef struct cheat_control_struct
 	int weapon_id;//当前武器ID
 
 	bool aim;//自瞄开关控制
+	bool aim_scoped;//开镜自瞄
+	bool aim_fire;//开枪自瞄
+	bool aim_quiet_step;//静步自瞄
+	bool aim_auto_scoped;//瞄准敌人后自动开镜
+	bool aim_auto_fire;//瞄准敌人后自动开枪
+	bool aim_close_scoped;//自瞄后关闭开镜状态
 	float aim_offset;//自瞄微调
+	float aim_max_angle;//在准星范围内的敌人才进行自瞄
 
 	bool report;//举报开关控制
 	int report_mode;//举报模式
@@ -46,12 +53,17 @@ typedef struct cheat_control_struct
 	bool report_aim_bot;//自瞄
 	bool report_speed_hack;//加速
 
+	bool other;//其它功能开关
+	bool other_again_jump;//连跳功能
+
 
 	cheat_control_struct()
 	{
 		show_imgui = true;
 
 		aim_offset = 1.5f;
+		aim_max_angle = 20.0f;
+
 		report_interval = 5;
 
 		report_wall_hack = report_aim_bot = true;

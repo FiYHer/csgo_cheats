@@ -4,6 +4,8 @@
 #include "aim.hpp"
 #include "report.hpp"
 #include "imgui_gui.hpp"
+#include "glow.hpp"
+#include "other.hpp"
 
 #include <assert.h>
 #include <Psapi.h>
@@ -12,8 +14,6 @@
 
 #include <d3d9.h>
 #pragma comment(lib,"d3d9")
-#include "glow.hpp"
-
 
 //Ç°ÏòÉùÃ÷
 static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
@@ -258,6 +258,7 @@ static bool __stdcall create_move(float input_sample_time, user_cmd_struct* cmd)
 	{
 		aim_space::run(cmd);
 		report_space::run();
+		other_space::again_jump(cmd);
 	}
 
 	return state;

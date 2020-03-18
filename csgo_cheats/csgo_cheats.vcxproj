@@ -66,8 +66,10 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="localize.hpp" />
     <ClInclude Include="matrix3x4.hpp" />
+    <ClInclude Include="move_type.hpp" />
     <ClInclude Include="net_vars.h" />
     <ClInclude Include="node.hpp" />
+    <ClInclude Include="other.hpp" />
     <ClInclude Include="paint_kit.hpp" />
     <ClInclude Include="player_info.hpp" />
     <ClInclude Include="ray.hpp" />
@@ -98,7 +100,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -168,6 +170,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

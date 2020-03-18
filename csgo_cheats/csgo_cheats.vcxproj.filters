@@ -218,5 +218,11 @@
     <ClInclude Include="sight_trace_filter.hpp">
       <Filter>struct</Filter>
     </ClInclude>
+    <ClInclude Include="other.hpp">
+      <Filter>cheats</Filter>
+    </ClInclude>
+    <ClInclude Include="move_type.hpp">
+      <Filter>enum</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

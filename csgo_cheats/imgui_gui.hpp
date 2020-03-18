@@ -51,6 +51,7 @@ public:
 		ImGui::Checkbox(u8"切换皮肤功能", &g_config.control.skin);
 		ImGui::Checkbox(u8"玩家举报功能", &g_config.control.report);
 		ImGui::Checkbox(u8"人物自瞄功能", &g_config.control.aim);
+		ImGui::Checkbox(u8"其它有用功能", &g_config.control.other);
 
 		ImGui::End();
 	}
@@ -68,6 +69,7 @@ public:
 		render_skin();
 		render_report();
 		render_aim();
+		render_other();
 
 
 		ImGui::EndFrame();
@@ -148,8 +150,29 @@ public:
 		if (!g_config.control.aim) return;
 		ImGui::Begin(u8"自瞄");
 
-		ImGui::SliderFloat(u8"自瞄微调", &g_config.control.aim_offset, 0.0f, 30.0f);
+		ImGui::Checkbox(u8"开镜自瞄", &g_config.control.aim_scoped);
+		ImGui::Checkbox(u8"开枪自瞄", &g_config.control.aim_fire);
+		ImGui::Checkbox(u8"静步自瞄", &g_config.control.aim_quiet_step);
 		ImGui::Separator();
+
+		ImGui::Checkbox(u8"瞄准敌人后自动开镜", &g_config.control.aim_auto_scoped);
+		ImGui::Checkbox(u8"瞄准敌人后自动开枪", &g_config.control.aim_auto_fire);
+		ImGui::Checkbox(u8"自瞄后关闭开镜状态", &g_config.control.aim_close_scoped);
+		ImGui::Separator();
+
+		ImGui::SliderFloat(u8"自瞄微调", &g_config.control.aim_offset, 0.0f, 30.0f);
+		ImGui::SliderFloat(u8"自瞄范围", &g_config.control.aim_max_angle, 5, 89);
+
+		ImGui::End();
+	}
+
+	//其它功能菜单
+	void render_other() noexcept
+	{
+		if (!g_config.control.other) return;
+		ImGui::Begin(u8"其它");
+
+		ImGui::Checkbox(u8"连跳功能", &g_config.control.other_again_jump);
 
 		ImGui::End();
 	}
