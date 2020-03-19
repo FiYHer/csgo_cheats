@@ -23,7 +23,7 @@ public:
 
 		//设置imgui为白色
 		ImGui::StyleColorsLight();
-
+		ImGui::GetStyle().ScrollbarSize = 9.0f;
 		ImGuiIO& io = ImGui::GetIO();
 		io.IniFilename = nullptr;//不需要保存imgui配置文件
 		io.LogFilename = nullptr;//不需要保存imgui信息
@@ -46,6 +46,7 @@ public:
 	{
 		ImGui::Begin(u8"CSGO游戏辅助", &g_config.control.show_imgui);
 		ImGui::Text(u8"Ins  显示/隐藏菜单");
+		ImGui::Text(u8"提示:如果墙体闪烁，请按Ins隐藏当前菜单即可解决!!!");
 
 		ImGui::Checkbox(u8"人物辉光功能", &g_config.control.glow);
 		ImGui::Checkbox(u8"切换皮肤功能", &g_config.control.skin);
@@ -59,22 +60,35 @@ public:
 	//渲染界面函数
 	void render() noexcept 
 	{
-		if (!g_config.control.show_imgui) return;
+		if (g_config.control.show_imgui)
+		{
+			ImGui_ImplDX9_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
 
-		ImGui_ImplDX9_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
+			render_manager();
+			render_glow();
+			render_skin();
+			render_report();
+			render_aim();
+			render_other();
 
-		render_manager();
-		render_skin();
-		render_report();
-		render_aim();
-		render_other();
+			ImGui::EndFrame();
+			ImGui::Render();
+			ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+		}
+	}
 
+	//人物辉光菜单
+	void render_glow() noexcept
+	{
+		if (!g_config.control.glow) return;
 
-		ImGui::EndFrame();
-		ImGui::Render();
-		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+		ImGui::Begin(u8"辉光");
+		ImGui::Checkbox(u8"辉光敌人", &g_config.control.glow_enemy);
+		ImGui::Checkbox(u8"辉光队友", &g_config.control.glow_friend);
+
+		ImGui::End();
 	}
 
 	//切换皮肤菜单

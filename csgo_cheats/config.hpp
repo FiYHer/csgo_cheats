@@ -25,6 +25,8 @@ typedef struct cheat_control_struct
 	bool show_imgui;//显示imgui菜单
 
 	bool glow;//辉光显示控制
+	bool glow_enemy;//辉光敌人
+	bool glow_friend;//辉光队友
 
 	bool skin;//换皮肤控制
 	std::vector<weapen_kit_struct> skin_vector;//武器皮肤列表

@@ -150,7 +150,6 @@ public:
 		original_reset = **reinterpret_cast<decltype(original_reset)**>(g_config.memory.reset);
 		**reinterpret_cast<decltype(my_reset)***>(g_config.memory.reset) = my_reset;
 
-
 		client.hook_at(37, frame_stage_notify);
 		clientMode.hook_at(24, create_move);
 		clientMode.hook_at(44, do_post_screen_effects);

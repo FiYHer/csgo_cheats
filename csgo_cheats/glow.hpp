@@ -36,19 +36,29 @@ namespace glow_space
 			//获取辉光对象信息
 			glow_object_definition_struct& glow_object = g_config.memory.glow_object_mamager->glow_object_definitions[i];
 
-			//获取该辉光对象对应的实例
-			auto entity = glow_object.entity;
-			if(glow_object.is_unused() || !entity || entity->is_dormant()) continue;
-
-			//如果我玩家
-			if (entity->get_client_class()->classId == classId_enum::CSPlayer)
+			//辉光对象
+			auto set_glow_object = [&](self_vector_struct color)
 			{
 				glow_object.renderWhenOccluded = true;//设置为看不见玩家也辉光
 				glow_object.alpha = 1.0f;//一点也不透明
 				glow_object.glowStyle = 0;//默认类型
 				glow_object.bloomAmount = 1.0f;//最厚
-				int health = local_player->get_health();//获取自身血量
-				glow_object.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };//设置亮光
+				glow_object.glowColor = color;//颜色
+			};
+
+			//获取该辉光对象对应的实例
+			auto entity = glow_object.entity;
+			if(glow_object.is_unused() || !entity || entity->is_dormant()) continue;
+
+			//如果不是玩家
+			if (entity->get_client_class()->classId != classId_enum::CSPlayer) continue;
+
+			//辉光
+			if (g_config.control.glow_friend && !entity->is_enemy()) set_glow_object({ 150.0f,150.0f,150.0f });
+			else if (g_config.control.glow_enemy && entity->is_enemy())
+			{
+				int health = local_player->get_health();//获取血量
+				set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
 			}
 		}
 	}
