@@ -10,13 +10,14 @@
 	<img src="test4.jpg" alt="新版">
 </h1>
 
-## 视频观看[优酷视频](https://v.youku.com/v_show/id_XNDU5Mzk2Njc5Mg==.html)
+## 视频观看[bill](https://www.bilibili.com/video/av97457146)
 
 ## 尝试编译
 笔者用的编译器是VS2017版，Release版本 X84版本 ISO C++最新草案标准(/std:c++latest) DLL
 
 ## 字体问题
 为了正常中文显示，所以需要一个能显示中文的字体msyh.ttc，你们的C盘里面应该有，没有的话就去百度下载一个，或者到这里下载[msyh](http://font.chinaz.com/161111131720.htm)，下载到了就放到C盘根目录，再次注入就能正常显示中文了
+或者打开imgui_gui.hpp文件的第33行，修改为自己电脑的字体路径后重新编译
 
 ## 注入器问题
 随便上百度下载一个DLL注入器，这样子不需要辅助了还能卸载
