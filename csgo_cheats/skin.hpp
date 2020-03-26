@@ -2,13 +2,14 @@
 #include <algorithm>
 #include <fstream>
 #include <vector>
+#include <limits>
+#include <map>
 #include "config.hpp"
 #include "frame_state.hpp"
 #include "game_event.hpp"
 #include "player_info.hpp"
 #include "weapon_item_definition_index.hpp"
-#include <limits>
-
+#include "weapon_info.hpp"
 
 
 //武器皮肤命名空间
@@ -113,6 +114,81 @@ namespace skin_space
 		std::sort(g_config.control.skin_vector.begin(), g_config.control.skin_vector.end());
 	}
 
+	//初始化小刀
+	void initialize_knife() noexcept
+	{
+		g_config.control.knife_vector.push_back({ 0, "Default" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_BAYONET, "Bayonet" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_CSS, "Classic Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_SKELETON, "Skeleton Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_OUTDOOR, "Nomad Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_CORD, "Paracord Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_CANIS, "Survival Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_FLIP, "Flip Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_GUT, "Gut Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_KARAMBIT, "Karambit" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_M9_BAYONET, "M9 Bayonet" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_TACTICAL, "Huntsman Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_FALCHION, "Falchion Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_SURVIVAL_BOWIE, "Bowie Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_BUTTERFLY, "Butterfly Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_PUSH, "Shadow Daggers" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_URSUS, "Ursus Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_GYPSY_JACKKNIFE, "Navaja Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_STILETTO, "Stiletto Knife" });
+		g_config.control.knife_vector.push_back({ WEAPON_KNIFE_WIDOWMAKER, "Talon Knife" });
+
+	}
+
+	//获取手套和小刀信息
+	const weapon_info_struct* get_knife_glove_info(int index = -1) noexcept
+	{
+		//手套和小刀的信息
+		const static std::map<int, weapon_info_struct> info =
+		{
+			{WEAPON_KNIFE,{"models/weapons/v_knife_default_ct.mdl", "knife"}},
+			{WEAPON_KNIFE_T,{"models/weapons/v_knife_default_t.mdl", "knife_t"}},
+			{WEAPON_KNIFE_BAYONET,{"models/weapons/v_knife_bayonet.mdl", "bayonet"}},
+			{WEAPON_KNIFE_CSS,{"models/weapons/v_knife_css.mdl", "knife_css"}},
+			{WEAPON_KNIFE_SKELETON,{"models/weapons/v_knife_skeleton.mdl", "knife_skeleton"}},
+			{WEAPON_KNIFE_OUTDOOR,{"models/weapons/v_knife_outdoor.mdl", "knife_outdoor"}},
+			{WEAPON_KNIFE_CORD,{"models/weapons/v_knife_cord.mdl", "knife_cord"}},
+			{WEAPON_KNIFE_CANIS,{"models/weapons/v_knife_canis.mdl", "knife_canis"}},
+			{WEAPON_KNIFE_FLIP,{"models/weapons/v_knife_flip.mdl", "knife_flip"}},
+			{WEAPON_KNIFE_GUT,{"models/weapons/v_knife_gut.mdl", "knife_gut"}},
+			{WEAPON_KNIFE_KARAMBIT, {"models/weapons/v_knife_karam.mdl", "knife_karambit"}},
+			{WEAPON_KNIFE_M9_BAYONET, {"models/weapons/v_knife_m9_bay.mdl", "knife_m9_bayonet"}},
+			{WEAPON_KNIFE_TACTICAL, {"models/weapons/v_knife_tactical.mdl", "knife_tactical"}},
+			{WEAPON_KNIFE_FALCHION, {"models/weapons/v_knife_falchion_advanced.mdl", "knife_falchion"}},
+			{WEAPON_KNIFE_SURVIVAL_BOWIE, {"models/weapons/v_knife_survival_bowie.mdl", "knife_survival_bowie"}},
+			{WEAPON_KNIFE_BUTTERFLY, {"models/weapons/v_knife_butterfly.mdl", "knife_butterfly"}},
+			{WEAPON_KNIFE_PUSH, {"models/weapons/v_knife_push.mdl", "knife_push"}},
+			{WEAPON_KNIFE_URSUS,{"models/weapons/v_knife_ursus.mdl", "knife_ursus"}},
+			{WEAPON_KNIFE_GYPSY_JACKKNIFE,{"models/weapons/v_knife_gypsy_jackknife.mdl", "knife_gypsy_jackknife"}},
+			{WEAPON_KNIFE_STILETTO,{"models/weapons/v_knife_stiletto.mdl", "knife_stiletto"}},
+			{WEAPON_KNIFE_WIDOWMAKER,{"models/weapons/v_knife_widowmaker.mdl", "knife_widowmaker"}},
+
+			{GLOVE_STUDDED_BLOODHOUND,{"models/weapons/w_models/arms/w_glove_bloodhound.mdl"}},
+			{GLOVE_T_SIDE,{"models/weapons/w_models/arms/w_glove_fingerless.mdl"}},
+			{GLOVE_CT_SIDE,{"models/weapons/w_models/arms/w_glove_hardknuckle.mdl"}},
+			{GLOVE_SPORTY,{"models/weapons/w_models/arms/w_glove_sporty.mdl"}},
+			{GLOVE_SLICK,{"models/weapons/w_models/arms/w_glove_slick.mdl"}},
+			{GLOVE_LEATHER_WRAP,{"models/weapons/w_models/arms/w_glove_handwrap_leathery.mdl"}},
+			{GLOVE_MOTORCYCLE,{"models/weapons/w_models/arms/w_glove_motorcycle.mdl"}},
+			{GLOVE_SPECIALIST,{"models/weapons/w_models/arms/w_glove_specialist.mdl"}},
+			{GLOVE_HYDRA,{"models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl"}}
+		};
+
+		const auto entry = info.find(index);
+		return entry == end(info) ? nullptr : &entry->second;
+	}
+
+	//判断是否是小刀
+	bool is_knife(const int i) noexcept
+	{
+		return (i >= WEAPON_KNIFE_BAYONET && i < GLOVE_STUDDED_BLOODHOUND) || i == WEAPON_KNIFE_T || i == WEAPON_KNIFE;
+	}
+
 	//更新武器皮肤数据
 	void update_weapen_data(entity_class* entity) noexcept
 	{
@@ -139,33 +215,49 @@ namespace skin_space
 			auto weapon = g_config.entity_list->get_entity_from_handle(weapon_handle);
 			if (!weapon) continue;
 
-			//获取武器定义索引，AK-47就是7
-			auto& weapon_index = weapon->get_item_definition_index();
-
-			//保存武器ID
-			g_config.control.weapon_id = weapon_index;
-
 			//强制使用
 			weapon->get_item_id_high() = -1;
 
 			//设置用户ID
 			weapon->get_account_id() = player_info.xuidLow;
 
-			//设置武器质量
-			weapon->get_entity_quality() = 0;
-
 			//设置武器皮肤ID
 			weapon->get_fallback_paint_kit() = g_config.control.weapon_skin_id;
 
-			//设置武器seed
-			weapon->get_fallback_seed() = 0;
-
-			//设置武器的stat_trak
-			weapon->get_fallback_stat_trak() = 0;
-
-			//设置武器的wear
-			weapon->get_fallback_wear() = 0;
+			//获取小刀信息
+			if (is_knife(weapon->get_item_definition_index()))
+			{
+				if (const auto knife_glove_info = get_knife_glove_info(g_config.control.knife_index))
+				{
+					weapon->get_item_definition_index() = g_config.control.knife_index;
+					weapon->set_model_index(g_config.model_info->get_model_index(knife_glove_info->model));
+					weapon->pre_data_update(0);
+				}
+			}
 		}
+
+		//获取视图模型
+		const auto view_model = g_config.entity_list->get_entity_from_handle(entity->get_view_model());
+		if (!view_model) return;
+
+		//获取视图中的武器
+		const auto view_model_weapon = g_config.entity_list->get_entity_from_handle(view_model->get_weapon());
+		if (!view_model_weapon) return;
+
+		//获取小刀信息
+		const auto override_info = get_knife_glove_info(view_model_weapon->get_item_definition_index());
+		if (!override_info) return;
+
+		//获取覆盖视图索引
+		const auto override_model_index = g_config.model_info->get_model_index(override_info->model);
+		view_model->get_model_index() = override_model_index;
+
+		//获取世界模型
+		const auto world_model = g_config.entity_list->get_entity_from_handle(view_model_weapon->get_weapon_world_model());
+		if (!world_model) return;
+
+		//设置世界模型
+		world_model->get_model_index() = override_model_index + 1;
 	}
 
 	//更新图标

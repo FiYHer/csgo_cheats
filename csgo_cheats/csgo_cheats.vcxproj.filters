@@ -224,5 +224,11 @@
     <ClInclude Include="move_type.hpp">
       <Filter>enum</Filter>
     </ClInclude>
+    <ClInclude Include="weapon_info.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="model_info.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

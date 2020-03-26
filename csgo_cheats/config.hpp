@@ -15,6 +15,7 @@
 #include "user_cmd.hpp"
 #include "global_vars.h"
 #include "engine_sight_trace.hpp"
+#include "model_info.hpp"
 
 //客户模式类
 class client_mode_class;
@@ -33,6 +34,9 @@ typedef struct cheat_control_struct
 	int weapon_skin_id;//武器皮肤ID
 	std::unordered_map<int,const char*> weapon_map;//通过ID查找枪械
 	int weapon_id;//当前武器ID
+
+	std::vector<weapen_kit_struct> knife_vector;//小刀模型列表
+	int knife_index;//小刀索引
 
 	bool aim;//自瞄开关控制
 	bool aim_scoped;//开镜自瞄
@@ -153,6 +157,7 @@ typedef struct configuration_struct
 	localize_class* localize;//定位类指针
 	cvar_class* cvar;//数值类指针
 	engine_trace_class* engine_trace;//引擎视线跟踪类指针
+	model_info_class* model_info;//模型信息类指针
 
 	cheat_control_struct control;//作弊控制结构
 	memory_struct memory;//内存相关结构
@@ -170,7 +175,7 @@ typedef struct configuration_struct
 		cvar = find<cvar_class>(L"vstdlib", "VEngineCvar007");
 		global_vars = **reinterpret_cast<global_vars_struct***>((*reinterpret_cast<uintptr_t**>(client))[11] + 10);
 		engine_trace = find<engine_trace_class>(L"engine", "EngineTraceClient004");
-
+		model_info = find<model_info_class>(L"engine", "VModelInfoClient004");
 
 	}
 

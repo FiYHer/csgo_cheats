@@ -138,6 +138,7 @@ public:
 		//Œ‰∆˜∆§∑Ù≥ı ºªØ
 		skin_space::initialize_skin();
 		skin_space::initialize_weapon();
+		skin_space::initialize_knife();
 		_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 		_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 

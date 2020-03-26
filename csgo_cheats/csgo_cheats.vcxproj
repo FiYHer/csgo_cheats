@@ -66,6 +66,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="localize.hpp" />
     <ClInclude Include="matrix3x4.hpp" />
+    <ClInclude Include="model_info.hpp" />
     <ClInclude Include="move_type.hpp" />
     <ClInclude Include="net_vars.h" />
     <ClInclude Include="node.hpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="skin.hpp" />
     <ClInclude Include="utl_vector.hpp" />
     <ClInclude Include="weapen_item_schema.hpp" />
+    <ClInclude Include="weapon_info.hpp" />
     <ClInclude Include="weapon_item_definition_index.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

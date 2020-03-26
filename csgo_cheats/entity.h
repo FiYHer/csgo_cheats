@@ -36,6 +36,18 @@ public:
 		return call_virtual_method<entity_class*, int>(this, 4, handle);
 	}
 
+	//设置模型索引
+	constexpr void set_model_index(int index) noexcept
+	{
+		call_virtual_method<void, int>(this, 75, index);
+	}
+
+	//更新数据
+	constexpr void pre_data_update(int updateType) noexcept
+	{
+		call_virtual_method<void, int>(this + 8, 6, updateType);
+	}
+
 	//判断是否是敌人
 	bool is_enemy() noexcept;
 
@@ -72,6 +84,8 @@ public:
 	NETVAR(get_next_attack, "CBaseCombatCharacter", "m_flNextAttack", float)//下一次攻击的时间
 	NETVAR(get_flags, "CBasePlayer", "m_fFlags", int)//人物状态标识
 	NETVAR_OFFSET(get_move_type, "CBaseEntity", "m_nRenderMode", 1, move_type_enum)//获取人物移动类型
+	NETVAR(get_model_index, "CBaseEntity", "m_nModelIndex", unsigned)//
+	NETVAR(get_weapon_world_model, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)//
 
 
 };

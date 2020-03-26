@@ -109,11 +109,29 @@ public:
 			return true;
 		}, nullptr, g_config.control.skin_vector.size(), 10);
 
-		//这一次于上一次不一样，所以是新选择了武器皮肤
 		if (weapon_kit_index_last != weapon_kit_index)
 		{
 			skin_space::schedule_hud_update();
 			weapon_kit_index_last = weapon_kit_index;
+		}
+
+		//小刀选择
+		static int knife_select_last = 0;
+		static int knife_select = 0;
+		ImGui::Combo(u8"小刀模型选择", &knife_select, [](void* data, int idx, const char** out_text)
+		{
+			//武器皮肤字符串
+			*out_text = g_config.control.knife_vector[idx].name.c_str();
+
+			//更新武器皮肤ID
+			g_config.control.knife_index = g_config.control.knife_vector[idx].id;
+			return true;
+		}, nullptr, g_config.control.knife_vector.size(), 10);
+
+		if (knife_select != knife_select_last)
+		{
+			skin_space::schedule_hud_update();
+			knife_select_last = knife_select;
 		}
 
 		ImGui::End();
