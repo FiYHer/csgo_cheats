@@ -44,15 +44,34 @@ public:
 	//渲染界面管理
 	void render_manager() noexcept 
 	{
-		ImGui::Begin(u8"CSGO游戏辅助", &g_config.control.show_imgui);
-		ImGui::Text(u8"Ins  显示/隐藏菜单");
-		ImGui::Text(u8"提示:如果墙体闪烁，请按Ins隐藏当前菜单即可解决!!!");
+		ImGui::Begin(u8"csgo assistant", &g_config.control.show_imgui);
 
-		ImGui::Checkbox(u8"人物辉光功能", &g_config.control.glow);
-		ImGui::Checkbox(u8"切换皮肤功能", &g_config.control.skin);
-		ImGui::Checkbox(u8"玩家举报功能", &g_config.control.report);
-		ImGui::Checkbox(u8"人物自瞄功能", &g_config.control.aim);
-		ImGui::Checkbox(u8"其它有用功能", &g_config.control.other);
+		ImGui::Text(u8"Language");
+		ImGui::SameLine();
+		ImGui::RadioButton(u8"中文显示", &g_config.control.language_english, 0);
+		ImGui::SameLine();
+		ImGui::RadioButton(u8"English show", &g_config.control.language_english, 1);
+
+		if (!g_config.control.language_english)
+		{
+			ImGui::Text(u8"Ins  显示 / 隐藏菜单");
+			ImGui::Text(u8"提示:如果墙体闪烁，请按Ins隐藏当前菜单即可解决!!!");
+			ImGui::Checkbox(u8"人物辉光功能", &g_config.control.glow);
+			ImGui::Checkbox(u8"切换皮肤功能", &g_config.control.skin);
+			ImGui::Checkbox(u8"玩家举报功能", &g_config.control.report);
+			ImGui::Checkbox(u8"人物自瞄功能", &g_config.control.aim);
+			ImGui::Checkbox(u8"其它有用功能", &g_config.control.other);
+		}
+		else
+		{
+			ImGui::Text(u8"Ins  show / hide menu");
+			ImGui::Text(u8"tip: if the wall is flickering, press Ins to hide the current menu.");
+			ImGui::Checkbox(u8"players glow functions", &g_config.control.glow);
+			ImGui::Checkbox(u8"change skin functions", &g_config.control.skin);
+			ImGui::Checkbox(u8"players report functions", &g_config.control.report);
+			ImGui::Checkbox(u8"players aimbot functions", &g_config.control.aim);
+			ImGui::Checkbox(u8"other useful functions", &g_config.control.other);
+		}
 
 		ImGui::End();
 	}
@@ -84,9 +103,18 @@ public:
 	{
 		if (!g_config.control.glow) return;
 
-		ImGui::Begin(u8"辉光");
-		ImGui::Checkbox(u8"辉光敌人", &g_config.control.glow_enemy);
-		ImGui::Checkbox(u8"辉光队友", &g_config.control.glow_friend);
+		ImGui::Begin(u8"glow");
+
+		if (!g_config.control.language_english)
+		{
+			ImGui::Checkbox(u8"辉光敌人", &g_config.control.glow_enemy);
+			ImGui::Checkbox(u8"辉光队友", &g_config.control.glow_friend);
+		}
+		else
+		{
+			ImGui::Checkbox(u8"enemy glow", &g_config.control.glow_enemy);
+			ImGui::Checkbox(u8"teammate glow", &g_config.control.glow_friend);
+		}
 
 		ImGui::End();
 	}
@@ -95,43 +123,83 @@ public:
 	void render_skin() noexcept
 	{
 		if (!g_config.control.skin) return;
-		ImGui::Begin(u8"皮肤");
+		ImGui::Begin(u8"skin");
 
 		static int weapon_kit_index_last = 0;//上一次的武器皮肤
 		static int weapon_kit_index = 0;//这一次的武器皮肤
-		ImGui::Combo(u8"武器皮肤选择", &weapon_kit_index, [](void* data, int idx, const char** out_text)
-		{
-			//武器皮肤字符串
-			*out_text = g_config.control.skin_vector[idx].name.c_str();
 
-			//更新武器皮肤ID
-			g_config.control.weapon_skin_id = g_config.control.skin_vector[idx].id;
-			return true;
-		}, nullptr, g_config.control.skin_vector.size(), 10);
-
-		if (weapon_kit_index_last != weapon_kit_index)
+		if (!g_config.control.language_english)
 		{
-			skin_space::schedule_hud_update();
-			weapon_kit_index_last = weapon_kit_index;
+			ImGui::Combo(u8"武器皮肤选择", &weapon_kit_index, [](void* data, int idx, const char** out_text)
+			{
+				//武器皮肤字符串
+				*out_text = g_config.control.skin_vector[idx].name.c_str();
+
+				//更新武器皮肤ID
+				g_config.control.weapon_skin_id = g_config.control.skin_vector[idx].id;
+				return true;
+			}, nullptr, g_config.control.skin_vector.size(), 10);
+			if (weapon_kit_index_last != weapon_kit_index)
+			{
+				skin_space::schedule_hud_update();
+				weapon_kit_index_last = weapon_kit_index;
+			}
+		}
+		else
+		{
+			ImGui::Combo(u8"weapon skin select", &weapon_kit_index, [](void* data, int idx, const char** out_text)
+			{
+				//武器皮肤字符串
+				*out_text = g_config.control.skin_vector[idx].name.c_str();
+
+				//更新武器皮肤ID
+				g_config.control.weapon_skin_id = g_config.control.skin_vector[idx].id;
+				return true;
+			}, nullptr, g_config.control.skin_vector.size(), 10);
+			if (weapon_kit_index_last != weapon_kit_index)
+			{
+				skin_space::schedule_hud_update();
+				weapon_kit_index_last = weapon_kit_index;
+			}
 		}
 
 		//小刀选择
 		static int knife_select_last = 0;
 		static int knife_select = 0;
-		ImGui::Combo(u8"小刀模型选择", &knife_select, [](void* data, int idx, const char** out_text)
-		{
-			//武器皮肤字符串
-			*out_text = g_config.control.knife_vector[idx].name.c_str();
 
-			//更新武器皮肤ID
-			g_config.control.knife_index = g_config.control.knife_vector[idx].id;
-			return true;
-		}, nullptr, g_config.control.knife_vector.size(), 10);
-
-		if (knife_select != knife_select_last)
+		if (!g_config.control.language_english)
 		{
-			skin_space::schedule_hud_update();
-			knife_select_last = knife_select;
+			ImGui::Combo(u8"小刀模型选择", &knife_select, [](void* data, int idx, const char** out_text)
+			{
+				//武器皮肤字符串
+				*out_text = g_config.control.knife_vector[idx].name.c_str();
+
+				//更新武器皮肤ID
+				g_config.control.knife_index = g_config.control.knife_vector[idx].id;
+				return true;
+			}, nullptr, g_config.control.knife_vector.size(), 10);
+			if (knife_select != knife_select_last)
+			{
+				skin_space::schedule_hud_update();
+				knife_select_last = knife_select;
+			}
+		}
+		else
+		{
+			ImGui::Combo(u8"knife model select", &knife_select, [](void* data, int idx, const char** out_text)
+			{
+				//武器皮肤字符串
+				*out_text = g_config.control.knife_vector[idx].name.c_str();
+
+				//更新武器皮肤ID
+				g_config.control.knife_index = g_config.control.knife_vector[idx].id;
+				return true;
+			}, nullptr, g_config.control.knife_vector.size(), 10);
+			if (knife_select != knife_select_last)
+			{
+				skin_space::schedule_hud_update();
+				knife_select_last = knife_select;
+			}
 		}
 
 		ImGui::End();
@@ -141,38 +209,75 @@ public:
 	void render_report() noexcept
 	{
 		if (!g_config.control.report) return;
-		ImGui::Begin(u8"举报");
+		ImGui::Begin(u8"report");
 
-		ImGui::RadioButton(u8"全部举报", &g_config.control.report_mode, 1);
-		ImGui::SameLine();
-		ImGui::RadioButton(u8"单个举报", &g_config.control.report_mode, 2);
-		ImGui::Separator();
-
-		ImGui::Checkbox(u8"举报骂人", &g_config.control.report_text_abuse);
-		ImGui::Checkbox(u8"举报骚扰", &g_config.control.report_grief);
-		ImGui::Checkbox(u8"举报透视", &g_config.control.report_wall_hack);
-		ImGui::Checkbox(u8"举报自瞄", &g_config.control.report_aim_bot);
-		ImGui::Checkbox(u8"举报加速", &g_config.control.report_speed_hack);
-		ImGui::Separator();
-
-		ImGui::SliderInt(u8"举报时间间隔", &g_config.control.report_interval, 5, 50);
-		ImGui::Separator();
-		if (ImGui::Button(u8"从新举报")) report_space::clear_report_list();
-		ImGui::Separator();
-
-		if (g_config.control.report_mode == 2 && g_config.control.report_players.size())
+		if (!g_config.control.language_english)
 		{
-			static int report_player_index = 0;
-			ImGui::Combo(u8"选择举报玩家", &report_player_index, [](void* data, int idx, const char** out_text)
-			{
-				*out_text = g_config.control.report_players[idx].name;
-				return true;
-			}, nullptr, g_config.control.report_players.size(), 10);
-
-			//获取玩家的XUID
-			if ((int)g_config.control.report_players.size() > report_player_index)
-				g_config.control.report_player_xuid = g_config.control.report_players[report_player_index].xuid;
+			ImGui::RadioButton(u8"全部举报", &g_config.control.report_mode, 1); ImGui::SameLine();
+			ImGui::RadioButton(u8"单个举报", &g_config.control.report_mode, 2); ImGui::Separator();
+			ImGui::Checkbox(u8"举报骂人", &g_config.control.report_text_abuse);
+			ImGui::Checkbox(u8"举报骚扰", &g_config.control.report_grief);
+			ImGui::Checkbox(u8"举报透视", &g_config.control.report_wall_hack);
+			ImGui::Checkbox(u8"举报自瞄", &g_config.control.report_aim_bot);
+			ImGui::Checkbox(u8"举报加速", &g_config.control.report_speed_hack);
+			ImGui::Separator();
 		}
+		else
+		{
+			ImGui::RadioButton(u8"report everyone", &g_config.control.report_mode, 1); ImGui::SameLine();
+			ImGui::RadioButton(u8"report one", &g_config.control.report_mode, 2); ImGui::Separator();
+			ImGui::Checkbox(u8"report text abuse", &g_config.control.report_text_abuse);
+			ImGui::Checkbox(u8"report grief", &g_config.control.report_grief);
+			ImGui::Checkbox(u8"report wall hack", &g_config.control.report_wall_hack);
+			ImGui::Checkbox(u8"report aimbot hack", &g_config.control.report_aim_bot);
+			ImGui::Checkbox(u8"report speed hack", &g_config.control.report_speed_hack);
+			ImGui::Separator();
+		}
+
+		if (!g_config.control.language_english)
+		{
+			if (g_config.control.report_mode == 2 && g_config.control.report_players.size())
+			{
+				static int report_player_index = 0;
+				ImGui::Combo(u8"选择举报玩家", &report_player_index, [](void* data, int idx, const char** out_text)
+				{
+					*out_text = g_config.control.report_players[idx].name;
+					return true;
+				}, nullptr, g_config.control.report_players.size(), 10);
+
+				//获取玩家的XUID
+				if ((int)g_config.control.report_players.size() > report_player_index)
+					g_config.control.report_player_xuid = g_config.control.report_players[report_player_index].xuid;
+			}
+		}
+		else
+		{
+			if (g_config.control.report_mode == 2 && g_config.control.report_players.size())
+			{
+				static int report_player_index = 0;
+				ImGui::Combo(u8"select report player name", &report_player_index, [](void* data, int idx, const char** out_text)
+				{
+					*out_text = g_config.control.report_players[idx].name;
+					return true;
+				}, nullptr, g_config.control.report_players.size(), 10);
+
+				//获取玩家的XUID
+				if ((int)g_config.control.report_players.size() > report_player_index)
+					g_config.control.report_player_xuid = g_config.control.report_players[report_player_index].xuid;
+			}
+		}
+
+		if (!g_config.control.language_english)
+		{
+			ImGui::SliderInt(u8"举报时间间隔", &g_config.control.report_interval, 5, 50);ImGui::Separator();
+			if (ImGui::Button(u8"清空举报列表")) report_space::clear_report_list();
+		}
+		else
+		{
+			ImGui::SliderInt(u8"report time interval", &g_config.control.report_interval, 5, 50); ImGui::Separator();
+			if (ImGui::Button(u8"clear report list")) report_space::clear_report_list();
+		}
+
 		ImGui::End();
 	}
 
@@ -180,20 +285,30 @@ public:
 	void render_aim() noexcept
 	{
 		if (!g_config.control.aim) return;
-		ImGui::Begin(u8"自瞄");
+		ImGui::Begin(u8"aimbot");
 
-		ImGui::Checkbox(u8"开镜自瞄", &g_config.control.aim_scoped);
-		ImGui::Checkbox(u8"开枪自瞄", &g_config.control.aim_fire);
-		ImGui::Checkbox(u8"静步自瞄", &g_config.control.aim_quiet_step);
-		ImGui::Separator();
-
-		ImGui::Checkbox(u8"瞄准敌人后自动开镜", &g_config.control.aim_auto_scoped);
-		ImGui::Checkbox(u8"瞄准敌人后自动开枪", &g_config.control.aim_auto_fire);
-		ImGui::Checkbox(u8"自瞄后关闭开镜状态", &g_config.control.aim_close_scoped);
-		ImGui::Separator();
-
-		ImGui::SliderFloat(u8"自瞄微调", &g_config.control.aim_offset, 0.0f, 30.0f);
-		ImGui::SliderFloat(u8"自瞄范围", &g_config.control.aim_max_angle, 5, 89);
+		if (!g_config.control.language_english)
+		{
+			ImGui::Checkbox(u8"开镜自瞄", &g_config.control.aim_scoped);
+			ImGui::Checkbox(u8"开枪自瞄", &g_config.control.aim_fire);
+			ImGui::Checkbox(u8"静步自瞄", &g_config.control.aim_quiet_step); ImGui::Separator();
+			ImGui::Checkbox(u8"瞄准敌人后自动开镜", &g_config.control.aim_auto_scoped);
+			ImGui::Checkbox(u8"瞄准敌人后自动开枪", &g_config.control.aim_auto_fire);
+			ImGui::Checkbox(u8"自瞄后关闭开镜状态", &g_config.control.aim_close_scoped); ImGui::Separator();
+			ImGui::SliderFloat(u8"自瞄微调", &g_config.control.aim_offset, 0.0f, 30.0f);
+			ImGui::SliderFloat(u8"自瞄范围", &g_config.control.aim_max_angle, 5, 89);
+		}
+		else
+		{
+			ImGui::Checkbox(u8"aimbot when opening the mirror", &g_config.control.aim_scoped);
+			ImGui::Checkbox(u8"aimbot when shooting", &g_config.control.aim_fire);
+			ImGui::Checkbox(u8"aimbot when the button shift is pressed", &g_config.control.aim_quiet_step); ImGui::Separator();
+			ImGui::Checkbox(u8"automatically turn on the mirror after aiming at the enemy", &g_config.control.aim_auto_scoped);
+			ImGui::Checkbox(u8"automatically fire after aiming at the enemy", &g_config.control.aim_auto_fire);
+			ImGui::Checkbox(u8"turn off the mirror state after aimbot", &g_config.control.aim_close_scoped); ImGui::Separator();
+			ImGui::SliderFloat(u8"aimbot pos fine tuning", &g_config.control.aim_offset, 0.0f, 30.0f);
+			ImGui::SliderFloat(u8"aimbot range fine tuning", &g_config.control.aim_max_angle, 5, 89);
+		}
 
 		ImGui::End();
 	}
@@ -202,9 +317,10 @@ public:
 	void render_other() noexcept
 	{
 		if (!g_config.control.other) return;
-		ImGui::Begin(u8"其它");
+		ImGui::Begin(u8"other");
 
-		ImGui::Checkbox(u8"连跳功能", &g_config.control.other_again_jump);
+		if(!g_config.control.language_english) ImGui::Checkbox(u8"连跳功能", &g_config.control.other_again_jump);
+		else ImGui::Checkbox(u8"rabbit jump", &g_config.control.other_again_jump);
 
 		ImGui::End();
 	}

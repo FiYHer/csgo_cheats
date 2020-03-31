@@ -24,6 +24,7 @@ class client_mode_class;
 typedef struct cheat_control_struct
 {
 	bool show_imgui;//显示imgui菜单
+	int language_english;//选择英文
 
 	bool glow;//辉光显示控制
 	bool glow_enemy;//辉光敌人

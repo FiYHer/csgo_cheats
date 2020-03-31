@@ -1,5 +1,4 @@
 # csgo_cheats
-[![CS:GO](https://www.csgo.com.cn/index.html)](https://www.csgo.com.cn/index.html) 
 这是一个根据Osiris改进而来的CSGO游戏辅助,去除了很多不需要的功能，加入了自己的想法
 
 # 效果图
@@ -8,6 +7,7 @@
 	<img src="test2.jpg" alt="新版">
 	<img src="test3.jpg" alt="新版">
 	<img src="test4.jpg" alt="新版">
+	<img src="test5.jpg" alt="新版">
 </h1>
 
 ## 视频观看[bill](https://www.bilibili.com/video/av97457146)
