@@ -48,6 +48,40 @@ public:
 		call_virtual_method<void, int>(this + 8, 6, updateType);
 	}
 
+	//获取当前的武器
+	constexpr entity_class* get_active_weapon() noexcept
+	{
+		return call_virtual_method<entity_class*>(this, 267);
+	}
+
+	//获取武器的不正确率
+	constexpr float get_inaccuracy() noexcept
+	{
+		return call_virtual_method<float>(this, 482);
+	}
+
+	//获取自瞄punch
+	auto get_aim_punch() noexcept
+	{
+		self_vector_struct vec;
+		call_virtual_method<void>(this, 345, std::ref(vec));
+		return vec;
+	}
+
+	//是否是狙击枪
+	constexpr bool is_sniper_rifle() noexcept
+	{
+		switch (get_client_class()->classId) 
+		{
+		case classId_enum::Ssg08:
+		case classId_enum::Awp:
+		case classId_enum::Scar20:
+		case classId_enum::G3sg1:
+			return true;
+		default: return false;
+		}
+	}
+
 	//判断是否是敌人
 	bool is_enemy() noexcept;
 
@@ -86,6 +120,8 @@ public:
 	NETVAR_OFFSET(get_move_type, "CBaseEntity", "m_nRenderMode", 1, move_type_enum)//获取人物移动类型
 	NETVAR(get_model_index, "CBaseEntity", "m_nModelIndex", unsigned)//
 	NETVAR(get_weapon_world_model, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)//
-
+	NETVAR(is_gun_game_immunity, "CCSPlayer", "m_bGunGameImmunity", bool)//枪战免疫
+	NETVAR(is_clip, "CBaseCombatWeapon", "m_iClip1", int)//不是枪械
+	NETVAR(get_next_primary_attack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)//下一次主要攻击
 
 };

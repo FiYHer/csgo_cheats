@@ -23,58 +23,49 @@ class client_mode_class;
 //游戏作弊控制结构
 typedef struct cheat_control_struct
 {
-	bool show_imgui;//显示imgui菜单
-	int language_english;//选择英文
+	bool show_imgui = true;//显示imgui菜单
+	int language_english = 0;//选择英文
 
-	bool glow;//辉光显示控制
-	bool glow_enemy;//辉光敌人
-	bool glow_friend;//辉光队友
+	bool show_glow = false;//辉光显示控制
+	bool glow_enable = false;//开启辉光
+	bool glow_enemy = false;//辉光敌人
+	bool glow_friend = false;//辉光队友
 
-	bool skin;//换皮肤控制
+	bool show_skin = false;//显示换肤窗口
+	bool skin_enable = false;//开启换肤
 	std::vector<weapen_kit_struct> skin_vector;//武器皮肤列表
-	int weapon_skin_id;//武器皮肤ID
+	int weapon_skin_id = 0;//武器皮肤ID
 	std::unordered_map<int,const char*> weapon_map;//通过ID查找枪械
-	int weapon_id;//当前武器ID
+	int weapon_id = 0;//当前武器ID
 
 	std::vector<weapen_kit_struct> knife_vector;//小刀模型列表
-	int knife_index;//小刀索引
+	int knife_index = 0;//小刀索引
 
-	bool aim;//自瞄开关控制
-	bool aim_scoped;//开镜自瞄
-	bool aim_fire;//开枪自瞄
-	bool aim_quiet_step;//静步自瞄
-	bool aim_auto_scoped;//瞄准敌人后自动开镜
-	bool aim_auto_fire;//瞄准敌人后自动开枪
-	bool aim_close_scoped;//自瞄后关闭开镜状态
-	float aim_offset;//自瞄微调
-	float aim_max_angle;//在准星范围内的敌人才进行自瞄
-
-	bool report;//举报开关控制
-	int report_mode;//举报模式
-	int report_interval;//举报间隔
+	bool aim_show = false;//显示自瞄窗口
+	bool aim_enable = false;//开启自瞄
+	int aim_bone = 8;//自瞄部位
+	bool aim_auto_shot = false;//自动开枪
+	bool aim_auto_scope = false;//自动开镜
+	bool aim_aimlock = false;//一直锁定敌人
+	float aim_fov = 255.0f;//允许自瞄的范围
+	float aim_max_aim_inaccuracy = 1.0f;//自瞄的最大不正确率
+	float aim_max_shot_inaccuracy = 1.0f;//射击的最大不正确率
+	
+	bool show_report = false;//显示句柄窗口
+	bool report_enable =  false;//开启举报
+	int report_mode = 1;//举报模式
+	int report_interval = 5;//举报间隔
 	std::vector<player_info_struct> report_players;//游戏房间玩家信息列表
 	uint64_t report_player_xuid;//举报玩家xuid
-	bool report_text_abuse;//骂人
-	bool report_grief;//骚扰
-	bool report_wall_hack;//透视
-	bool report_aim_bot;//自瞄
-	bool report_speed_hack;//加速
+	bool report_text_abuse = false;//骂人
+	bool report_grief = false;//骚扰
+	bool report_wall_hack = true;//透视
+	bool report_aim_bot = true;//自瞄
+	bool report_speed_hack = false;//加速
 
-	bool other;//其它功能开关
-	bool other_again_jump;//连跳功能
+	bool show_other = false;//其它功能开关
+	bool other_again_jump = false;//连跳功能
 
-
-	cheat_control_struct()
-	{
-		show_imgui = true;
-
-		aim_offset = 1.5f;
-		aim_max_angle = 20.0f;
-
-		report_interval = 5;
-
-		report_wall_hack = report_aim_bot = true;
-	}
 }cheat_control_struct;
 
 //内存相关结构

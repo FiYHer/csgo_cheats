@@ -21,7 +21,7 @@ namespace glow_space
 	void render() noexcept
 	{
 		//没有启用人物辉光
-		if (!g_config.control.glow) return;
+		if (!g_config.control.glow_enable) return;
 
 		//获取自身信息
 		const auto local_player = g_config.entity_list->get_entity(g_config.engine->get_local_player());
@@ -53,12 +53,21 @@ namespace glow_space
 			//如果不是玩家
 			if (entity->get_client_class()->classId != classId_enum::CSPlayer) continue;
 
-			//辉光
-			if (g_config.control.glow_friend && !entity->is_enemy()) set_glow_object({ 150.0f,150.0f,150.0f });
+			//获取玩家信息
+			player_info_struct player_info;
+			if (!g_config.engine->get_player_info(entity->get_index(), player_info)) continue;
+
+			//真实玩家和电脑玩家的辉光颜色有一点差别
+			if (g_config.control.glow_friend && !entity->is_enemy())
+			{
+				if(player_info.fakeplayer) set_glow_object({ 0.7f,0.0f,1.0f });
+				else set_glow_object({ 1.0f,0.0f,1.0f });
+			}
 			else if (g_config.control.glow_enemy && entity->is_enemy())
 			{
-				int health = local_player->get_health();//获取血量
-				set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
+				int health = entity->get_health();//获取血量
+				if(player_info.fakeplayer) set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.3f });
+				else set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
 			}
 		}
 	}

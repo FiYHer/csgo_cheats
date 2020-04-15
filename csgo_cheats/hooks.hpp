@@ -135,6 +135,8 @@ public:
 public:
 	hooks_class() noexcept
 	{
+		srand((unsigned int)time(0));
+
 		//武器皮肤初始化
 		skin_space::initialize_skin();
 		skin_space::initialize_weapon();
@@ -249,11 +251,16 @@ static void __stdcall frame_stage_notify(frame_stage_enum stage) noexcept
 
 static bool __stdcall create_move(float input_sample_time, user_cmd_struct* cmd) noexcept
 {
+	//先执行原函数
 	bool state = g_hooks.clientMode.call_original<bool, 24>(input_sample_time, cmd);
 
 	//没有命令
 	if (!cmd->command_number) return state;
 
+	//更新时间
+	g_config.global_vars->serverTime(cmd);
+
+	//在游戏中才操作
 	if (g_config.engine->is_in_game())
 	{
 		aim_space::run(cmd);

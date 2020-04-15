@@ -277,7 +277,7 @@ namespace skin_space
 	void run(frame_stage_enum state) noexcept
 	{
 		//没开
-		if (!g_config.control.skin) return;
+		if (!g_config.control.skin_enable) return;
 
 		//更新武器皮肤帧
 		if (state == frame_stage_enum::NET_UPDATE_POSTDATAUPDATE_START)

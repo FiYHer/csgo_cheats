@@ -69,7 +69,7 @@ namespace report_space
 	void run() noexcept
 	{
 		//没开
-		if (!g_config.control.report) return;
+		if (!g_config.control.report_enable) return;
 
 		//获取所有玩家
 		get_room_players_info();
