@@ -50,6 +50,7 @@ typedef struct cheat_control_struct
 	float aim_fov = 255.0f;//允许自瞄的范围
 	float aim_max_aim_inaccuracy = 1.0f;//自瞄的最大不正确率
 	float aim_max_shot_inaccuracy = 1.0f;//射击的最大不正确率
+	float aim_offset = 0.0f;//自瞄偏移
 	
 	bool show_report = false;//显示句柄窗口
 	bool report_enable =  false;//开启举报

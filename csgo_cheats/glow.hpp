@@ -37,12 +37,12 @@ namespace glow_space
 			glow_object_definition_struct& glow_object = g_config.memory.glow_object_mamager->glow_object_definitions[i];
 
 			//辉光对象
-			auto set_glow_object = [&](self_vector_struct color)
+			auto set_glow_object = [&](self_vector_struct color, int is_fake)
 			{
 				glow_object.renderWhenOccluded = true;//设置为看不见玩家也辉光
-				glow_object.alpha = 1.0f;//一点也不透明
+				glow_object.alpha = is_fake ? 0.7f : 1.0f;//机器人和真人的透明度不同
 				glow_object.glowStyle = 0;//默认类型
-				glow_object.bloomAmount = 1.0f;//最厚
+				glow_object.bloomAmount = is_fake ? 0.7f : 1.0f;//机器人和真人的厚度不同
 				glow_object.glowColor = color;//颜色
 			};
 
@@ -58,16 +58,11 @@ namespace glow_space
 			if (!g_config.engine->get_player_info(entity->get_index(), player_info)) continue;
 
 			//真实玩家和电脑玩家的辉光颜色有一点差别
-			if (g_config.control.glow_friend && !entity->is_enemy())
-			{
-				if(player_info.fakeplayer) set_glow_object({ 0.7f,0.0f,1.0f });
-				else set_glow_object({ 1.0f,0.0f,1.0f });
-			}
+			if (g_config.control.glow_friend && !entity->is_enemy()) set_glow_object({ 1.0f,0.0f,1.0f }, player_info.fakeplayer);
 			else if (g_config.control.glow_enemy && entity->is_enemy())
 			{
 				int health = entity->get_health();//获取血量
-				if(player_info.fakeplayer) set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.3f });
-				else set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
+				set_glow_object({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f }, player_info.fakeplayer);
 			}
 		}
 	}

@@ -51,11 +51,7 @@ hooks_class g_hooks;//游戏流程劫持
 //为了模块能够正常卸载
 BOOL WINAPI DllMain(_In_ void* _DllHandle, _In_ unsigned long _Reason, _In_opt_ void* _Reserved)
 {
-	if (_Reason == DLL_PROCESS_ATTACH)
-	{
-		hide_self init(_DllHandle);
-		DisableThreadLibraryCalls((HMODULE)_DllHandle);
-	}
+	static hide_self init(_DllHandle);
 	if (_Reason == DLL_PROCESS_DETACH) g_hooks.restore();
 	return TRUE;
 }
