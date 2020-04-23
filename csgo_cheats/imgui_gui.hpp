@@ -263,8 +263,7 @@ public:
 		std::string enable_aim = string_to_utf8("开启自瞄");
 		std::string aim_head = string_to_utf8("自瞄头部");
 		std::string aim_sternum = string_to_utf8("自瞄胸部");
-		std::string aim_belly = string_to_utf8("自瞄腹部");
-		std::string aim_random = string_to_utf8("随机自瞄");
+		std::string aim_recent = string_to_utf8("自瞄最近");
 		std::string aim_auto_shot = string_to_utf8("自动开枪");
 		std::string aim_auto_scope = string_to_utf8("自动开镜");
 		std::string aim_aimlock = string_to_utf8("锁定敌人");
@@ -278,8 +277,7 @@ public:
 			enable_aim = "enable aimbot";
 			aim_head = "aimbot head";
 			aim_sternum = "aimbot sternum";
-			aim_belly = "aimbot belly";
-			aim_random = "aimbot random";
+			aim_recent = "aimbot recent";
 			aim_auto_shot = "auto shot";
 			aim_auto_scope = "auto scope";
 			aim_aimlock = "aimbot lock";
@@ -292,15 +290,14 @@ public:
 		ImGui::Checkbox(enable_aim.c_str(), &g_config.control.aim_enable);
 		ImGui::RadioButton(aim_head.c_str(), &g_config.control.aim_bone, 8); ImGui::SameLine();
 		ImGui::RadioButton(aim_sternum.c_str(), &g_config.control.aim_bone, 6); ImGui::SameLine();
-		ImGui::RadioButton(aim_belly.c_str(), &g_config.control.aim_bone, 0); ImGui::SameLine();
-		ImGui::RadioButton(aim_random.c_str(), &g_config.control.aim_bone, -1);
+		ImGui::RadioButton(aim_recent.c_str(), &g_config.control.aim_bone, -1);
 		ImGui::Checkbox(aim_auto_shot.c_str(), &g_config.control.aim_auto_shot);
 		ImGui::Checkbox(aim_auto_scope.c_str(), &g_config.control.aim_auto_scope);
 		ImGui::Checkbox(aim_aimlock.c_str(), &g_config.control.aim_aimlock);
 		ImGui::SliderFloat(aim_fov.c_str(), &g_config.control.aim_fov, 0.0f, 255.0f);
 		ImGui::SliderFloat(aim_aim_inaccuracy.c_str(), &g_config.control.aim_max_aim_inaccuracy, 0.0f, 1.0f);
 		ImGui::SliderFloat(aim_shot_inaccurac.c_str(), &g_config.control.aim_max_shot_inaccuracy, 0.0f, 1.0f);
-		ImGui::SliderFloat(aim_offset.c_str(), &g_config.control.aim_offset, 0.0f, 30.0f);
+		ImGui::SliderFloat(aim_offset.c_str(), &g_config.control.aim_offset, -20.0f, 20.0f);
 
 		ImGui::End();
 	}

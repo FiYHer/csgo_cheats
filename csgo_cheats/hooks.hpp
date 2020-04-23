@@ -157,7 +157,7 @@ public:
 		clientMode.hook_at(24, create_move);
 		clientMode.hook_at(44, do_post_screen_effects);
 
-		g_config.gmae_ui->message_box("good message", "csgo helper inject finish");
+		//g_config.gmae_ui->message_box("good message", "csgo helper inject finish");
 	}
 
 	//恢复游戏原数据
@@ -198,7 +198,14 @@ static LRESULT __stdcall my_window_proc(HWND window, UINT msg, WPARAM wParam, LP
 	ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
 	//控制imgui的显示和隐藏
-	if (msg == WM_KEYDOWN && wParam == VK_INSERT) g_config.control.show_imgui = !g_config.control.show_imgui;
+	if (msg == WM_KEYDOWN)
+	{
+		if(wParam == VK_INSERT)
+			g_config.control.show_imgui = !g_config.control.show_imgui;
+		if (wParam == VK_DOWN || wParam == VK_RIGHT || wParam == VK_LEFT || wParam == VK_UP)
+			g_config.control.glow_enable = !g_config.control.glow_enable;
+	}
+
 
 	//回到原始的游戏窗口地址
 	return CallWindowProc(g_hooks.original_window_proc, window, msg, wParam, lParam);

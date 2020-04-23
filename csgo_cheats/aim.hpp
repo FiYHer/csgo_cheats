@@ -106,12 +106,13 @@ namespace aim_space
 	//}
 	*/
 
-	//自瞄
-	void aim_start(user_cmd_struct* cmd, self_vector_struct& local_pos, self_vector_struct& enemy_pos) noexcept
+	//自瞄角度
+	self_vector_struct aim_angle(user_cmd_struct* cmd, self_vector_struct& local_pos,self_vector_struct& enemy_pos)
 	{
 		float x = local_pos.x - enemy_pos.x;
 		float y = local_pos.y - enemy_pos.y;
-		float z = local_pos.z - enemy_pos.z + 60.0f + g_config.control.aim_offset;
+		float z = local_pos.z - enemy_pos.z + 60.0f + 5.0f + g_config.control.aim_offset;
+		if (cmd->buttons & user_cmd_struct::IN_DUCK) z -= 15.0f;
 
 		static const float pi = 3.1415f;
 		self_vector_struct angle{ atan(z / sqrt(x * x + y * y)) / pi * 180.f,atan(y / x) ,0 };
@@ -121,31 +122,19 @@ namespace aim_space
 		else if (x < 0.0f && y < 0.0f) angle.y = angle.y / pi * 180.0f;
 		else if (x >= 0.0f && y < 0.0f) angle.y = angle.y / pi * 180.f + 180.0f;
 
-		//获取原始角度范围
-		self_vector_struct old_angle;
-		g_config.engine->get_view_angles(old_angle);
-		if (abs(angle.x - old_angle.x) > g_config.control.aim_fov || abs(angle.y - old_angle.y) > g_config.control.aim_fov) return;
+		return angle;
+	}
 
-		//设置角度
-		cmd->view_angles = angle;
-		g_config.engine->set_view_angles(cmd->view_angles);
+	//计算自瞄距离
+	float aim_distance(self_vector_struct& enemy_pos)
+	{
+		self_vector_struct origin_pos;
+		g_config.engine->get_view_angles(origin_pos);
 
-		//获取玩家
-		const auto local_player = g_config.entity_list->get_entity(g_config.engine->get_local_player());
-		if (!local_player || !local_player->is_alive()) return;
+		float width = abs(origin_pos.x - enemy_pos.x);
+		float height = abs(origin_pos.y - enemy_pos.y);
 
-		//获取武器
-		const auto active_weapon = local_player->get_active_weapon();
-		if (!active_weapon || !active_weapon->is_clip()) return;
-
-		//自动开镜
-		if(g_config.control.aim_auto_scope && active_weapon->get_next_primary_attack() <= g_config.global_vars->serverTime() && active_weapon->is_sniper_rifle() && !local_player->get_is_scoped())
-			cmd->buttons |= user_cmd_struct::IN_ATTACK2;
-
-		//自动开枪
-		if (g_config.control.aim_auto_shot && active_weapon->get_next_primary_attack() <= g_config.global_vars->serverTime() && active_weapon->get_inaccuracy() <= g_config.control.aim_max_shot_inaccuracy)
-			cmd->buttons |= user_cmd_struct::IN_ATTACK;
-
+		return std::hypot(width, height);
 	}
 
 	//开启自瞄
@@ -154,87 +143,75 @@ namespace aim_space
 		//没有开启自瞄
 		if (!g_config.control.aim_enable) return;
 
-		//获取游戏窗口句柄
-		static auto hwnd = FindWindowW(L"Valve001", nullptr);
-		int width, height;
-		if (RECT rect; GetWindowRect(hwnd, &rect))
+		if (cmd->buttons & user_cmd_struct::IN_ATTACK//开枪状态
+			|| g_config.control.aim_auto_shot//自动射击
+			|| g_config.control.aim_auto_scope//自动开镜
+			|| g_config.control.aim_aimlock)//敌人锁定
 		{
-			width = (rect.right - rect.left) / 2;
-			height = (rect.bottom - rect.top) / 2;
-		}
+			//获取自己
+			const auto local_player = g_config.entity_list->get_entity(g_config.engine->get_local_player());
+			if (!local_player || !local_player->is_alive() || local_player->get_next_attack() > g_config.global_vars->serverTime()) return;
 
-		//获取自己
-		const auto local_player = g_config.entity_list->get_entity(g_config.engine->get_local_player());
-		if (!local_player || !local_player->is_alive() || local_player->get_next_attack() > g_config.global_vars->serverTime()) return;
+			//获取武器
+			const auto active_weapon = local_player->get_active_weapon();
+			if (!active_weapon || !active_weapon->is_clip()) return;
 
-		//获取武器
-		const auto active_weapon = local_player->get_active_weapon();
-		if (!active_weapon || !active_weapon->is_clip()) return;
+			//武器的不准确率超过了我们允许的范围
+			if (active_weapon->get_inaccuracy() > g_config.control.aim_max_aim_inaccuracy) return;
 
-		//获取自身矩阵信息
-		auto self_matrix = g_config.engine->world_to_screen_matrix();
+			//最近玩家位置
+			float distance = g_config.control.aim_fov;
+			self_vector_struct angle{};
 
-		//最近玩家位置
-		int min_distance = INT_MAX;
-		self_vector_struct min_pos;
-
-		//遍历玩家
-		for (int i = 1; i <= g_config.engine->get_max_clients(); i++)
-		{
-			//获取玩家对象
-			auto entity = g_config.entity_list->get_entity(i);
-			if (!entity || entity == local_player || !entity->is_alive() || !entity->is_enemy() || entity->is_dormant() || entity->is_gun_game_immunity()) continue;
-
-			//获取敌人位置
-			int bone_pos = g_config.control.aim_bone;
-			if (bone_pos)
+			//遍历玩家
+			for (int i = 1; i <= g_config.engine->get_max_clients(); i++)
 			{
-				int rondom = rand() % 3;//随机一个
-				if (rondom == 2) bone_pos = 0;//肚子
-				else if (rondom == 1) bone_pos = 6;//胸部
-				else bone_pos = 8;//头部
+				//获取玩家对象
+				auto entity = g_config.entity_list->get_entity(i);
+				if (!entity || entity == local_player || !entity->is_alive() || !entity->is_enemy() || entity->is_dormant() || entity->is_gun_game_immunity()) continue;
+
+				//获取敌人位置
+				int bone = g_config.control.aim_bone;
+
+				//敌人身体部位
+				std::vector<int> bones = (bone == -1) ? std::vector<int>{ 8, 7, 6, 5, 4, 3 } : std::vector<int>{ bone };
+
+				//判断哪一个部位最近
+				for (const auto& it : bones)
+				{
+					//获取该部位
+					self_vector_struct enemy_pos = entity->get_bone_position(it);
+
+					//如果玩家被墙体挡住了
+					if (!entity->is_visiable(enemy_pos)) continue;
+
+					//获取自瞄角度
+					self_vector_struct temp_angle = aim_angle(cmd, local_player->get_origin(), enemy_pos);
+					float temp_distance = aim_distance(temp_angle);
+					if (temp_distance < distance)
+					{
+						distance = temp_distance;
+						angle = temp_angle;
+					}
+				}
 			}
-			self_vector_struct enemy_pos = entity->get_bone_position(bone_pos);
 
-			//如果玩家被墙体挡住了
-			if (!entity->is_visiable(enemy_pos)) continue;
-
-			//朝向
-			float target = self_matrix[2][0] * enemy_pos.x
-				+ self_matrix[2][1] * enemy_pos.y
-				+ self_matrix[2][2] * enemy_pos.z
-				+ self_matrix[2][3];
-			if (target < 0.01f) continue;
-			target = 1.0f / target;
-
-			//将3D坐标转化为2D坐标进行距离判断
-			float distence_width = width
-				+ (self_matrix[0][0] * enemy_pos.x
-					+ self_matrix[0][1] * enemy_pos.y
-					+ self_matrix[0][2] * enemy_pos.z
-					+ self_matrix[0][3]) * target *width;
-			float distance_height = height
-				- (self_matrix[1][0] * enemy_pos.x
-					+ self_matrix[1][1] * enemy_pos.y
-					+ self_matrix[1][2] * enemy_pos.z
-					+ self_matrix[1][3]) * target * height;
-
-			//到准星距离
-			int distance = abs(width - (int)distence_width) + abs(height - (int)distance_height);
-			if (distance < min_distance)
+			//可以自瞄
+			if (angle)
 			{
-				min_distance = distance;
-				min_pos = enemy_pos;
+				//设置自瞄角度
+				cmd->view_angles = angle;
+				g_config.engine->set_view_angles(cmd->view_angles);
+
+				//自动开镜
+				if (g_config.control.aim_auto_scope && active_weapon->get_next_primary_attack() <= g_config.global_vars->serverTime() && active_weapon->is_sniper_rifle() && !local_player->get_is_scoped())
+					cmd->buttons |= user_cmd_struct::IN_ATTACK2;
+
+				//自动开枪
+				if (g_config.control.aim_auto_shot && active_weapon->get_next_primary_attack() <= g_config.global_vars->serverTime() && active_weapon->get_inaccuracy() <= g_config.control.aim_max_shot_inaccuracy)
+					cmd->buttons |= user_cmd_struct::IN_ATTACK;
+
 			}
 		}
-
-		//没有玩家
-		if (min_distance == INT_MAX) return;
-
-		//自瞄
-		if ((g_config.control.aim_auto_scope && active_weapon->is_sniper_rifle())
-			|| g_config.control.aim_auto_shot 
-			|| (cmd->buttons & user_cmd_struct::IN_ATTACK && active_weapon->get_inaccuracy() <= g_config.control.aim_max_aim_inaccuracy))
-			aim_start(cmd, local_player->get_origin(), min_pos);
 	}
 }

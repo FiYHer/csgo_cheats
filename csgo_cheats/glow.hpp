@@ -20,7 +20,6 @@ namespace glow_space
 	//进行辉光操作
 	void render() noexcept
 	{
-		//没有启用人物辉光
 		if (!g_config.control.glow_enable) return;
 
 		//获取自身信息
@@ -40,9 +39,9 @@ namespace glow_space
 			auto set_glow_object = [&](self_vector_struct color, int is_fake)
 			{
 				glow_object.renderWhenOccluded = true;//设置为看不见玩家也辉光
-				glow_object.alpha = is_fake ? 0.7f : 1.0f;//机器人和真人的透明度不同
+				glow_object.alpha = is_fake ? 0.8f : 1.0f;//机器人和真人的透明度不同
 				glow_object.glowStyle = 0;//默认类型
-				glow_object.bloomAmount = is_fake ? 0.7f : 1.0f;//机器人和真人的厚度不同
+				glow_object.bloomAmount = 1.0f;//机器人和真人的厚度不同
 				glow_object.glowColor = color;//颜色
 			};
 

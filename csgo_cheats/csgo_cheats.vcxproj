@@ -64,6 +64,7 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="input_system.hpp" />
     <ClInclude Include="localize.hpp" />
     <ClInclude Include="matrix3x4.hpp" />
     <ClInclude Include="model_info.hpp" />

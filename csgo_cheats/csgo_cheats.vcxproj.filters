@@ -230,5 +230,8 @@
     <ClInclude Include="model_info.hpp">
       <Filter>class</Filter>
     </ClInclude>
+    <ClInclude Include="input_system.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

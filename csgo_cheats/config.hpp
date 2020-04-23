@@ -16,6 +16,7 @@
 #include "global_vars.h"
 #include "engine_sight_trace.hpp"
 #include "model_info.hpp"
+#include "input_system.hpp"
 
 //客户模式类
 class client_mode_class;
@@ -151,6 +152,7 @@ typedef struct configuration_struct
 	cvar_class* cvar;//数值类指针
 	engine_trace_class* engine_trace;//引擎视线跟踪类指针
 	model_info_class* model_info;//模型信息类指针
+	input_system_class* input_system;//输入系统
 
 	cheat_control_struct control;//作弊控制结构
 	memory_struct memory;//内存相关结构
@@ -169,6 +171,7 @@ typedef struct configuration_struct
 		global_vars = **reinterpret_cast<global_vars_struct***>((*reinterpret_cast<uintptr_t**>(client))[11] + 10);
 		engine_trace = find<engine_trace_class>(L"engine", "EngineTraceClient004");
 		model_info = find<model_info_class>(L"engine", "VModelInfoClient004");
+		input_system = find<input_system_class>(L"inputsystem", "InputSystemVersion001");
 
 	}
 

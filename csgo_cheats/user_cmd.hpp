@@ -8,7 +8,7 @@ typedef struct user_cmd_struct
 	{
 		IN_ATTACK = 1 << 0,//×ó¼ü
 		IN_JUMP = 1 << 1,//ÌøÔ¾
-		IN_DUCK = 1 << 2,
+		IN_DUCK = 1 << 2,//ÏÂ¶×
 		IN_FORWARD = 1 << 3,//Ç°½ø
 		IN_BACK = 1 << 4,//ºóÍË
 		IN_USE = 1 << 5,
@@ -16,7 +16,7 @@ typedef struct user_cmd_struct
 		IN_MOVERIGHT = 1 << 10,//ÓÒÒÆ¶¯
 		IN_ATTACK2 = 1 << 11,//ÓÒ¼ü
 		IN_SCORE = 1 << 16,//¿ª¾µ
-		IN_BULLRUSH = 1 << 22
+		IN_BULLRUSH = 1 << 22//¿ñ±¼
 	};
 	int pad;
 	int command_number;
